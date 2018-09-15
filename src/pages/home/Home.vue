@@ -10,7 +10,7 @@
       </div>
       <i class="bar"></i>
     </header>
-    <div class="logincard">
+    <div class="logincard" v-if="!isLogin">
       <div class="logincard_left">
         <p class="title">登陆账号</p>
         <p class="desc">收藏文章,同步阅读记录,数据永不消失</p>
@@ -27,10 +27,32 @@
 
 <script>
 import HotRecomment from 'components/HotRecomment'
+import { mapGetters } from 'vuex'
+import API from 'api/api'
 export default {
   name: 'Home',
   components: {
     HotRecomment
+  },
+  created() {
+    this.getEntryByHotRecomment()
+  },
+  methods: {
+    getEntryByHotRecomment() {
+      let data = {
+        params: {
+          ...this.auth
+        }
+      }
+      console.log(this.auth)
+      API.getEntryByHotRecomment(data)
+    }
+  },
+  computed: {
+    ...mapGetters([
+      'isLogin',
+      'auth'
+    ])
   }
 }
 </script>

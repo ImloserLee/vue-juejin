@@ -8,15 +8,15 @@
     </div>
     <div class="input">
       <div class="username">
-        <input type="text" class="username_ipt" placeholder="邮箱/手机号">
+        <input type="text" class="username_ipt" placeholder="邮箱/手机号" v-model="username">
       </div>
       <div class="password">
-        <input type="password" placeholder="密码">
+        <input type="password" placeholder="密码" v-model="password">
         <svg-icon iconClass="eye" class="icon"></svg-icon>
       </div>
     </div>
     <div class="submit">
-      <button>登陆</button>
+      <button @click="hanldeLogin">登陆</button>
     </div>
     <div class="other">
       <p class="txt">其他登陆方式</p>
@@ -28,8 +28,27 @@
 </template>
 
 <script>
+import API from 'api/api'
 export default {
-  name: 'Login'
+  name: 'Login',
+  data() {
+    return {
+      username: '',
+      password: ''
+    }
+  },
+  methods: {
+    hanldeLogin() {
+      let data = {
+        data: {
+          phoneNumber: this.username,
+          password: this.password
+        }
+      }
+      // API.login(data);
+      this.$store.dispatch('login')
+    }
+  }
 }
 </script>
 
@@ -41,7 +60,7 @@ export default {
     left: 0;
     bottom: 0;
     right: 0;
-    display: none;
+    display: block;
     background-color: #fff;
     .logo {
       margin: 80px auto;

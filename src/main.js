@@ -2,12 +2,14 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
+import router from './router'
+import store from './store'
 import SvgIcon from './components/SvgIcon'
 
 import './style/phone-reset.css'
 import './icons'
 import './utils/setRem'
-import router from './router'
+
 Vue.component('svg-icon', SvgIcon)
 Vue.config.productionTip = false
 
@@ -15,6 +17,7 @@ Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })
