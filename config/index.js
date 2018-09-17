@@ -18,6 +18,13 @@ module.exports = {
           '^/timeline': '/'
         }
       },
+      '/auth': {
+        target: 'https://juejin.im/auth/type/phoneNumber',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/auth': '/'
+        }
+      }
     },
 
     // Various Dev Server settings
