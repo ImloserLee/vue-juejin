@@ -22,7 +22,7 @@ export default class Server {
         ...params
       }
       axios.request(_options).then(res => {
-        resolve(typeof res.data === 'object' ? res.data : JSON.parse(res.data))
+        resolve(res)
       }, error => {
         if (error.response) {
           reject(error.response.data)

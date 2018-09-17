@@ -35,7 +35,8 @@ export default {
     HotRecomment
   },
   created() {
-    this.getEntryByHotRecomment()
+    console.log(this.auth)
+    // this.getEntryByHotRecomment()
   },
   methods: {
     getEntryByHotRecomment() {
@@ -44,7 +45,6 @@ export default {
           ...this.auth
         }
       }
-      console.log(this.auth)
       API.getEntryByHotRecomment(data)
     }
   },

@@ -13,13 +13,12 @@ class API extends Server {
   }
 
   // 登陆
-  async login(params = {}) {
-    console.log(params)
-    try {
-      let result = await this.axios('post', `auth/type/phoneNumber`, params)
-      console.log(result)
-    } catch(err) {
-      throw err
+  async login(params = {}){
+    try{
+      let result = await this.axios('post', `/auth`, params)
+      return result
+    }catch(err){
+      throw err;
     }
   }
 }

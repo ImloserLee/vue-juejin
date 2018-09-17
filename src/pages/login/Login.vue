@@ -8,7 +8,7 @@
     </div>
     <div class="input">
       <div class="username">
-        <input type="text" class="username_ipt" placeholder="邮箱/手机号" v-model="username">
+        <input type="text" class="username_ipt" placeholder="手机号" v-model="username">
       </div>
       <div class="password">
         <input type="password" placeholder="密码" v-model="password">
@@ -28,7 +28,6 @@
 </template>
 
 <script>
-import API from 'api/api'
 export default {
   name: 'Login',
   data() {
@@ -39,14 +38,22 @@ export default {
   },
   methods: {
     hanldeLogin() {
+      if (this.username === '') {
+        alert('手机号不能为空')
+        return false
+      }
+      if (this.password === '') {
+        alert('密码不能为空!')
+        return false
+      }
       let data = {
         data: {
           phoneNumber: this.username,
           password: this.password
         }
       }
-      // API.login(data);
-      this.$store.dispatch('login')
+      // this.$store.dispatch('login', data)
+      this.$store.commit('mylogin')
     }
   }
 }
@@ -60,7 +67,6 @@ export default {
     left: 0;
     bottom: 0;
     right: 0;
-    display: block;
     background-color: #fff;
     .logo {
       margin: 80px auto;

@@ -38,16 +38,24 @@
         <div class="txt">我</div>
       </router-link>
     </div>
-    <login></login>
+    <transition name="lg">
+      <login v-if="isLogin"></login>
+    </transition>
   </div>
 </template>
 
 <script>
 import Login from 'pages/login/Login'
+import { mapGetters } from 'vuex'
 export default {
   name: 'App',
   components: {
     Login
+  },
+  computed: {
+    ...mapGetters([
+      'isLogin'
+    ])
   }
 }
 </script>
@@ -84,4 +92,16 @@ export default {
       }
     }
   }
+  .lg-enter-active
+  .lg-leave-active {
+    opacity: 0;
+  }
+  .lg-enter {
+    transform: translateX(100%);
+  }
+  .lg-leave-active {
+    transform: translateX(-100%);
+    opacity: 1;
+  }
+
 </style>
