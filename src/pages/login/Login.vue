@@ -1,7 +1,9 @@
 <template>
   <div class="login">
     <div class="back">
-      <svg-icon iconClass="return"></svg-icon>
+      <span  @click="hanldeGoBack">
+         <svg-icon iconClass="return"></svg-icon>
+      </span>
     </div>
     <div class="logo">
       <img src="./../../assets/images/logo.png" alt="">
@@ -52,8 +54,11 @@ export default {
           password: this.password
         }
       }
-      // this.$store.dispatch('login', data)
-      this.$store.commit('mylogin')
+      this.$store.dispatch('login', data)
+      this.hanldeGoBack()
+    },
+    hanldeGoBack() {
+      this.$router.go(-1)
     }
   }
 }
@@ -62,11 +67,12 @@ export default {
 <style lang="less" scoped>
   @import '~style/mixin.less';
   .login {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     bottom: 0;
     right: 0;
+    z-index: 999;
     background-color: #fff;
     .logo {
       margin: 80px auto;

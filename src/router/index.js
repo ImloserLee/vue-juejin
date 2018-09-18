@@ -9,6 +9,9 @@ export default new Router({
     {
       path: '/home',
       name: 'Home',
+      meta: {
+        slide: 2
+      },
       component: _import_('home/Home')
     },
     {
@@ -30,6 +33,14 @@ export default new Router({
       path: '/person',
       name: 'Person',
       component: _import_('person/Person')
+    },
+    {
+      path: '/login',
+      name: 'Login',
+      meta: {
+        slide: 1
+      },
+      component: _import_('login/Login')
     },
     {
       path: '/',

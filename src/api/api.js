@@ -3,9 +3,9 @@ class API extends Server {
   // 热们推荐
   async getEntryByHotRecomment(params = {}) {
     try {
-      let result = await this.axios('get', `/timeline/get_entry_by_timeline`, params)
-      if (result && result.m === 'ok') {
-        return result.d
+      let result = await this.axios('get', `/timeline/get_entry_by_hot_recomment`, params)
+      if (result.status === 200) {
+        return result.data
       }
     } catch(err) {
       throw err

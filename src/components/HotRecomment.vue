@@ -10,33 +10,63 @@
         <span class="r"><svg-icon iconClass="close" class="icon-close"></svg-icon></span>
       </div>
     </div>
-    <div class="item">
+    <div class="item" v-for="item in recomment" :key=item.objectId>
       <div class="item_left">
-        <p class="txt">如何保证前端代码质量</p>
-        <p class="slogan">266人喜欢</p>
+        <p class="txt">{{item.title}}</p>
+        <div class="slogan">
+          <span>{{item.collectionCount}}喜欢·</span>
+          <span>{{item.user.username}}·</span>
+          <span>{{item.createdAt | timeBefore}}</span>
+        </div>
       </div>
-      <div class="item_right"></div>
-    </div>
-    <div class="item">
-      <div class="item_left">
-        <p class="txt">如何保证前端代码质量</p>
-        <p class="slogan">266人喜欢</p>
+      <div class="item_right" v-if="item.screenshot">
+        <img :src="item.screenshot" />
       </div>
-      <div class="item_right"></div>
-    </div>
-    <div class="item">
-      <div class="item_left">
-        <p class="txt">如何保证前端代码质量</p>
-        <p class="slogan">266人喜欢</p>
-      </div>
-      <div class="item_right"></div>
     </div>
   </section>
 </template>
 
 <script>
 export default {
-  name: 'Hot'
+  name: 'Hot',
+  props: {
+    recomment: {
+      type: Array,
+      default: function () {
+        return []
+      }
+    }
+  },
+  filters: {
+    timeBefore: function(date) {
+      if (!date) {
+        return ''
+      }
+      let dateee = new Date(date).toJSON()
+      let dateTimeStamp  = new Date(+new Date(dateee)+8*3600*1000).toISOString().replace(/T/g,' ').replace(/\.[\d]{3}Z/,'') 
+      let sTime = new Date(dateTimeStamp).getTime()
+      let now = new Date().getTime()
+      let dvalue = now - sTime
+      let minTime = 60 * 1000
+      let hourTime = 60 * 60 * 1000
+      let dayTime = 24 * hourTime
+      let monthTime = 30 * dayTime
+      let yearTime = 12 * monthTime
+      if (dvalue < minTime) {
+        return '刚刚'
+      } else if (dvalue >= minTime && dvalue < hourTime) {
+        return parseInt(dvalue / minTime) + '分钟前'
+      } else if (dvalue >= hourTime && dvalue < dayTime) {
+        return parseInt(dvalue / hourTime) + '小时前'
+      } else if (dvalue >= dayTime && dvalue < monthTime) {
+        return parseInt(dvalue / dayTime) + '天前'
+      } else if (dvalue >= monthTime && dvalue < yearTime) {
+        return parseInt(dvalue / monthTime) + '月前'
+      } else if (dvalue >= yearTime) {
+        return parseInt(dvalue / yearTime) + '年前'
+      }
+    }
+  }
 }
 </script>
 
@@ -84,7 +114,7 @@ export default {
       border-top: 1px solid @border-color;
       &_left {
         flex: 3;
-        padding-right: 40px;
+        padding-right: 20px;
         height: 100%;
         .txt {
           margin-bottom: 25px;
@@ -98,7 +128,10 @@ export default {
       &_right {
         width: 150px;
         height: 100%;
-        background-color: orange;
+        img {
+          width: 100%;
+          height: 100%;
+        }
       }
     }
   }

@@ -10,18 +10,20 @@
       </div>
       <i class="bar"></i>
     </header>
-    <div class="logincard" v-if="!isLogin">
-      <div class="logincard_left">
-        <p class="title">登陆账号</p>
-        <p class="desc">收藏文章,同步阅读记录,数据永不消失</p>
+    <section class="section">
+      <div class="logincard" v-if="!isLogin">
+        <div class="logincard_left">
+          <p class="title">登陆账号</p>
+          <p class="desc">收藏文章,同步阅读记录,数据永不消失</p>
+        </div>
+        <div class="logincard_right">
+          <span class="login" @click="handleToLogin">登陆</span>
+        </div>
       </div>
-      <div class="logincard_right">
-        <p class="login">登陆</p>
+      <div class="content">
+        <hot-recomment :recomment="hotRecommentData"></hot-recomment>
       </div>
-    </div>
-    <div class="content">
-      <hot-recomment></hot-recomment>
-    </div>
+    </section>
   </div>
 </template>
 
@@ -29,23 +31,38 @@
 import HotRecomment from 'components/HotRecomment'
 import { mapGetters } from 'vuex'
 import API from 'api/api'
+const LIMIT = 20
 export default {
   name: 'Home',
+  data() {
+    return {
+      hotRecommentData: []
+    }
+  },
   components: {
     HotRecomment
   },
   created() {
-    console.log(this.auth)
-    // this.getEntryByHotRecomment()
+    // console.log(this.auth)
+    this.getEntryByHotRecomment()
   },
   methods: {
-    getEntryByHotRecomment() {
+    async getEntryByHotRecomment() {
       let data = {
         params: {
+          src: 'web',
+          limit: LIMIT,
           ...this.auth
         }
       }
-      API.getEntryByHotRecomment(data)
+      let res = await API.getEntryByHotRecomment(data)
+      if (res.m === 'ok') {
+        this.hotRecommentData = res.d.entry.entrylist.slice(0, 3)
+      }
+      console.log(this.hotRecommentData)
+    },
+    handleToLogin() {
+      this.$router.push({ path: '/login'})
     }
   },
   computed: {
@@ -60,12 +77,10 @@ export default {
 <style lang="less" scoped>
   @import '~style/mixin.less';
   .home {
-    margin-top: 120px;
+    position: relative;
+    width: 100%;
+    height: 100%;
     .header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
       .flex;
       padding: 0 40px;
       height: 100px;
@@ -100,31 +115,37 @@ export default {
         }
       }
     }
-    .logincard {
-      .flex;
-      padding: 0 40px;
-      height: 140px;
-      font-size: 36px;
-      background-color: #fff;
-      &_left {
-        flex: 3;
-        .title {
-          margin-bottom: 30px;
-          font-size: 36px;
+    .section {
+      position: absolute;
+      top: 100px;
+      left: 0;
+      right: 0;
+      .logincard {
+        .flex;
+        padding: 0 40px;
+        height: 140px;
+        font-size: 36px;
+        background-color: #fff;
+        &_left {
+          flex: 3;
+          .title {
+            margin-bottom: 30px;
+            font-size: 36px;
+          }
+          .desc {
+            color: @font-color;
+            font-size: 28px;
+          }
         }
-        .desc {
-          color: @font-color;
-          font-size: 28px;
+        &_right {
+          flex: 1;
+          .flex(@justify-content: flex-end);
+          color: @base-color;
         }
       }
-      &_right {
-        flex: 1;
-        .flex(@justify-content: flex-end);
-        color: @base-color;
+      .content {
+        margin-top: 20px;
       }
-    }
-    .content {
-      margin-top: 20px;
     }
   }
 </style>

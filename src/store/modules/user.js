@@ -2,7 +2,7 @@ import { Local } from 'utils/storage'
 import API from 'api/api'
 const user = {
   state: {
-    isLogin: false,
+    isLogin: Local.get('auth') ? true : false,
     auth: Local.get('auth')
   },
   actions: {
@@ -16,13 +16,11 @@ const user = {
       let res = data.data
       let auth = {
         client_id: res.clientId,
+        device_id: res.clientId,
         token: res.token,
         uid: res.userId
       }
       Local.set('auth', auth)
-    },
-    mylogin(state) {
-      state.isLogin = true
     }
   }
 }

@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-    <router-view/>
+    <transition :name="animate">
+      <router-view id="view"></router-view>
+    </transition>
     <div class="footer">
       <router-link to="/home" tag="div" class="item">
         <div class="icon">
@@ -38,9 +40,6 @@
         <div class="txt">我</div>
       </router-link>
     </div>
-    <transition name="lg">
-      <login v-if="isLogin"></login>
-    </transition>
   </div>
 </template>
 
@@ -49,6 +48,11 @@ import Login from 'pages/login/Login'
 import { mapGetters } from 'vuex'
 export default {
   name: 'App',
+  data() {
+    return {
+      animate: ''
+    }
+  },
   components: {
     Login
   },
@@ -56,6 +60,28 @@ export default {
     ...mapGetters([
       'isLogin'
     ])
+  },
+  watch: {
+    $route(to, from) {
+      /*
+      0: 不做动画
+      1: 左切换
+      2: 右切换
+      3: 上切换
+      4: 下切换
+        */
+      let animate = this.$router.animate || to.meta.slide
+      if (!animate) {
+        this.animate = ''
+      } else {
+        this.animate = animate === 1 ? 'slide-left' :
+            animate === 2 ? 'slide-right' :
+            animate === 3 ? 'slide-top' :
+            animate === 4 ? 'slide-bottom' : ''
+      }
+      console.log(this.animate)
+      this.$router.animate = 0
+    }
   }
 }
 </script>
@@ -65,6 +91,9 @@ export default {
   #app {
     width: 100%;
     height: 100%;
+    #view {
+      transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
+    }
     .footer {
       .flex;
       position: fixed;
@@ -92,16 +121,12 @@ export default {
       }
     }
   }
-  .lg-enter-active
-  .lg-leave-active {
+  .slide-left-enter, .slide-right-leave-active {
     opacity: 0;
-  }
-  .lg-enter {
     transform: translateX(100%);
   }
-  .lg-leave-active {
+  .slide-left-leave-active, .slide-right-enter {
+    opacity: 0;
     transform: translateX(-100%);
-    opacity: 1;
   }
-
 </style>
