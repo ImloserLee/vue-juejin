@@ -6,7 +6,9 @@
         <span class="txt">热门推荐</span>
       </div>
       <div class="title_right">
-        <span class="l" @click="handleRefreshRecomment"><svg-icon iconClass="refresh" class="icon-refresh"></svg-icon></span>
+        <span class="l" @click="handleRefreshRecomment">
+          <svg-icon iconClass="refresh" :class="[rotate ? 'rotate' : '', 'icon-refresh']"></svg-icon>
+        </span>
         <span class="r" @click="handleCloseRecomment"><svg-icon iconClass="close" class="icon-close"></svg-icon></span>
       </div>
     </div>
@@ -35,6 +37,10 @@ export default {
       default: function () {
         return []
       }
+    },
+    rotate: {
+      type: Boolean,
+      default: false
     }
   },
   methods: {
@@ -104,6 +110,9 @@ export default {
             margin-right: 30px;
             .icon-refresh {
               font-size: 48px;
+              &.rotate {
+                animation: rotate .8s linear infinite;
+              }
             }
           }
           &.r {
@@ -141,6 +150,14 @@ export default {
           height: 100%;
         }
       }
+    }
+  }
+  @keyframes rotate {
+    0% {
+      transform: rotate(0)
+    }
+    100% {
+      transform: rotate(360deg)
     }
   }
 </style>

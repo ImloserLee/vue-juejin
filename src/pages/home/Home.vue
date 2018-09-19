@@ -13,12 +13,14 @@
       </div>
       <div class="content">
         <hot-recomment 
-          v-if="showHotRecomment"
+          v-if="showHotRecomment && hotRecommentData.length"
           :recomment="hotRecommentData"
+          :rotate="rotate"
           @closeRecomment="handleColseRecomment"
           @refreshRecomment="handleRefreshRecomment"
         >
         </hot-recomment>
+        <item-pane></item-pane>
       </div>
     </section>
   </div>
@@ -26,6 +28,7 @@
 
 <script>
 import VHeader from './header/header'
+import ItemPane from './itempanel/ItemPanel'
 import HotRecomment from 'components/HotRecomment'
 import { mapGetters } from 'vuex'
 import API from 'api/api'
@@ -35,12 +38,14 @@ export default {
   data() {
     return {
       hotRecommentData: [],
-      showHotRecomment: true
+      showHotRecomment: true,
+      rotate: false
     }
   },
   components: {
     HotRecomment,
-    VHeader
+    VHeader,
+    ItemPane
   },
   created() {
     // console.log(this.auth)
@@ -70,6 +75,11 @@ export default {
     },
     // 刷新热门信息 热门推荐点击刷新，将当前的 3 条文章 objectId 以 id|id|id 的格式发送请求，然后重新拉取热门推荐列表
     async handleRefreshRecomment() {
+      this.rotate = true
+      let timer = setTimeout(() => {
+        this.rotate = false
+        clearTimeout(timer)
+      }, 800)
       let entryIds = this.hotRecommentData.map(item => {
         return item.objectId
       })
