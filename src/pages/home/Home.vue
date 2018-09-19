@@ -1,15 +1,6 @@
 <template>
   <div class="home">
-    <header class="header">
-      <div class="header_left">
-        <span class="title">首页</span>
-      </div>
-      <div class="header_right">
-        <span class="icon"><svg-icon iconClass="category"></svg-icon></span>
-        <span class="icon"><svg-icon iconClass="add"></svg-icon></span>
-      </div>
-      <i class="bar"></i>
-    </header>
+    <v-header></v-header>
     <section class="section">
       <div class="logincard" v-if="!isLogin">
         <div class="logincard_left">
@@ -21,13 +12,20 @@
         </div>
       </div>
       <div class="content">
-        <hot-recomment :recomment="hotRecommentData"></hot-recomment>
+        <hot-recomment 
+          v-if="showHotRecomment"
+          :recomment="hotRecommentData"
+          @closeRecomment="handleColseRecomment"
+          @refreshRecomment="handleRefreshRecomment"
+        >
+        </hot-recomment>
       </div>
     </section>
   </div>
 </template>
 
 <script>
+import VHeader from './header/header'
 import HotRecomment from 'components/HotRecomment'
 import { mapGetters } from 'vuex'
 import API from 'api/api'
@@ -36,17 +34,20 @@ export default {
   name: 'Home',
   data() {
     return {
-      hotRecommentData: []
+      hotRecommentData: [],
+      showHotRecomment: true
     }
   },
   components: {
-    HotRecomment
+    HotRecomment,
+    VHeader
   },
   created() {
     // console.log(this.auth)
     this.getEntryByHotRecomment()
   },
   methods: {
+    // 获取热门信息
     async getEntryByHotRecomment() {
       let data = {
         params: {
@@ -59,10 +60,31 @@ export default {
       if (res.m === 'ok') {
         this.hotRecommentData = res.d.entry.entrylist.slice(0, 3)
       }
-      console.log(this.hotRecommentData)
     },
+    // 前往登陆页面
     handleToLogin() {
       this.$router.push({ path: '/login'})
+    },
+    handleColseRecomment() {
+      this.showHotRecomment = false
+    },
+    // 刷新热门信息 热门推荐点击刷新，将当前的 3 条文章 objectId 以 id|id|id 的格式发送请求，然后重新拉取热门推荐列表
+    async handleRefreshRecomment() {
+      let entryIds = this.hotRecommentData.map(item => {
+        return item.objectId
+      })
+      entryIds = entryIds.join('|')
+      let data = {
+        params: {
+          src: 'web',
+          entryId: entryIds,
+          ...this.auth
+        }
+      }
+      let res = await API.refreshHotRecomment(data)
+      if (res.m === 'ok') {
+        this.getEntryByHotRecomment()
+      }
     }
   },
   computed: {
@@ -79,42 +101,7 @@ export default {
   .home {
     position: relative;
     width: 100%;
-    height: 100%;
-    .header {
-      .flex;
-      padding: 0 40px;
-      height: 100px;
-      font-size: 38px;
-      border-bottom: 1px solid #c7c5c5;
-      background-color: @bg-color;
-      .bar {
-        position: absolute;
-        bottom: 0;
-        left: 3%;
-        width: 120px;
-        height: 3px;
-        border-radius: 2px;
-        background-color: @base-color;
-      }
-      &_left {
-        flex: 1;
-        .title {
-          display: inline-block;
-          color: @base-color;
-        }
-      }
-      &_right {
-        flex: 1;
-        .flex(@justify-content: flex-end);
-        .icon {
-          display: inline-block;
-          font-size: 56px;
-          &:first-child {
-            margin-right: 10px;
-          }
-        }
-      }
-    }
+    height: 100%;    
     .section {
       position: absolute;
       top: 100px;

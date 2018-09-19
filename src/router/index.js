@@ -9,9 +9,6 @@ export default new Router({
     {
       path: '/home',
       name: 'Home',
-      meta: {
-        slide: 2
-      },
       component: _import_('home/Home')
     },
     {

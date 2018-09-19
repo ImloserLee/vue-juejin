@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <transition :name="animate">
+    <keep-alive>
       <router-view id="view"></router-view>
-    </transition>
+    </keep-alive>
     <div class="footer">
       <router-link to="/home" tag="div" class="item">
         <div class="icon">
@@ -79,7 +79,6 @@ export default {
             animate === 3 ? 'slide-top' :
             animate === 4 ? 'slide-bottom' : ''
       }
-      console.log(this.animate)
       this.$router.animate = 0
     }
   }
@@ -92,6 +91,8 @@ export default {
     width: 100%;
     height: 100%;
     #view {
+      width: 100%;
+      height: 100%;
       transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
     }
     .footer {

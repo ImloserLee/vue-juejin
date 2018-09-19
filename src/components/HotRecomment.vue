@@ -6,8 +6,8 @@
         <span class="txt">热门推荐</span>
       </div>
       <div class="title_right">
-        <span class="l"><svg-icon iconClass="refresh" class="icon-refresh"></svg-icon></span>
-        <span class="r"><svg-icon iconClass="close" class="icon-close"></svg-icon></span>
+        <span class="l" @click="handleRefreshRecomment"><svg-icon iconClass="refresh" class="icon-refresh"></svg-icon></span>
+        <span class="r" @click="handleCloseRecomment"><svg-icon iconClass="close" class="icon-close"></svg-icon></span>
       </div>
     </div>
     <div class="item" v-for="item in recomment" :key=item.objectId>
@@ -35,6 +35,14 @@ export default {
       default: function () {
         return []
       }
+    }
+  },
+  methods: {
+    handleCloseRecomment() {
+      this.$emit('closeRecomment')
+    },
+    handleRefreshRecomment() {
+      this.$emit('refreshRecomment')
     }
   },
   filters: {

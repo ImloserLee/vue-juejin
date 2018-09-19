@@ -12,6 +12,18 @@ class API extends Server {
     }
   }
 
+  // 刷新热门推荐
+  async refreshHotRecomment(params = {}) {
+    try {
+      let result = await this.axios('get', `/timeline/user_filter_entry`, params)
+      if (result.status === 200) {
+        return result.data
+      }
+    } catch (err) {
+      throw err
+    }
+  }
+
   // 登陆
   async login(params = {}){
     try{
