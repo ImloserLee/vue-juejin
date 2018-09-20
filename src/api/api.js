@@ -12,6 +12,18 @@ class API extends Server {
     }
   }
 
+  // 首页内容块
+  async getEntryByTimeline(params = {}) {
+    try {
+      let result = await this.axios('get', `/timeline/get_entry_by_timeline`, params)
+      console.log(result)
+      if (result.status === 200) {
+        return result.data
+      }
+    } catch (err) {
+      throw err
+    }
+  }
   // 刷新热门推荐
   async refreshHotRecomment(params = {}) {
     try {

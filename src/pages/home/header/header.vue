@@ -21,6 +21,8 @@ export default {
   @import '~style/mixin.less';
 
   .header {
+    position: relative;
+    height: 100px;
     .flex;
     padding: 0 40px;
     height: 100px;
@@ -30,9 +32,9 @@ export default {
     .bar {
       position: absolute;
       bottom: 0;
-      left: 3%;
-      width: 120px;
-      height: 3px;
+      left:0;
+      width: 150px;
+      height: 4px;
       border-radius: 2px;
       background-color: @base-color;
     }

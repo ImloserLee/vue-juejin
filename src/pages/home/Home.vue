@@ -1,32 +1,35 @@
 <template>
   <div class="home">
     <v-header></v-header>
-    <section class="section">
-      <div class="logincard" v-if="!isLogin">
-        <div class="logincard_left">
-          <p class="title">登陆账号</p>
-          <p class="desc">收藏文章,同步阅读记录,数据永不消失</p>
+    <scroll class="scroll">
+      <section class="section">
+        <div class="logincard" v-if="!isLogin">
+          <div class="logincard_left">
+            <p class="title">登陆账号</p>
+            <p class="desc">收藏文章,同步阅读记录,数据永不消失</p>
+          </div>
+          <div class="logincard_right">
+            <span class="login" @click="handleToLogin">登陆</span>
+          </div>
         </div>
-        <div class="logincard_right">
-          <span class="login" @click="handleToLogin">登陆</span>
+        <div class="content">
+          <hot-recomment 
+            v-if="showHotRecomment && hotRecommentData.length"
+            :recomment="hotRecommentData"
+            :rotate="rotate"
+            @closeRecomment="handleColseRecomment"
+            @refreshRecomment="handleRefreshRecomment"
+          >
+          </hot-recomment>
+          <item-pane :timeline="item" v-for="item in timelineData" :key="item.objectId"></item-pane>
         </div>
-      </div>
-      <div class="content">
-        <hot-recomment 
-          v-if="showHotRecomment && hotRecommentData.length"
-          :recomment="hotRecommentData"
-          :rotate="rotate"
-          @closeRecomment="handleColseRecomment"
-          @refreshRecomment="handleRefreshRecomment"
-        >
-        </hot-recomment>
-        <item-pane></item-pane>
-      </div>
-    </section>
+      </section>
+    </scroll>
   </div>
 </template>
 
 <script>
+import Scroll from 'components/Scroll'
 import VHeader from './header/header'
 import ItemPane from './itempanel/ItemPanel'
 import HotRecomment from 'components/HotRecomment'
@@ -38,18 +41,21 @@ export default {
   data() {
     return {
       hotRecommentData: [],
+      timelineData: [],
       showHotRecomment: true,
       rotate: false
     }
   },
   components: {
     HotRecomment,
+    Scroll,
     VHeader,
     ItemPane
   },
   created() {
     // console.log(this.auth)
     this.getEntryByHotRecomment()
+    this.getEntryByTimeline()
   },
   methods: {
     // 获取热门信息
@@ -64,6 +70,23 @@ export default {
       let res = await API.getEntryByHotRecomment(data)
       if (res.m === 'ok') {
         this.hotRecommentData = res.d.entry.entrylist.slice(0, 3)
+      }
+    },
+
+    // 获取首页内容
+    async getEntryByTimeline() {
+      let data = {
+        params: {
+          src: 'web',
+          limit: LIMIT,
+          category: 'all',
+          recomment: 1,
+          before: ''
+        }
+      }
+      let res = await API.getEntryByTimeline(data)
+      if (res.m === 'ok') {
+        this.timelineData = res.d.entrylist
       }
     },
     // 前往登陆页面
@@ -111,38 +134,41 @@ export default {
   .home {
     position: relative;
     width: 100%;
-    height: 100%;    
-    .section {
-      position: absolute;
-      top: 100px;
-      left: 0;
-      right: 0;
-      .logincard {
-        .flex;
-        padding: 0 40px;
-        height: 140px;
-        font-size: 36px;
-        background-color: #fff;
-        &_left {
-          flex: 3;
-          .title {
-            margin-bottom: 30px;
-            font-size: 36px;
+    height: 100%;
+    .scroll {
+      height: calc(100vh - 200px);
+      overflow: hidden;
+      .section {
+        .logincard {
+          .flex;
+          margin-top: 20px;
+          padding: 0 40px;
+          height: 140px;
+          font-size: 36px;
+          background-color: #fff;
+          &_left {
+            flex: 3;
+            .title {
+              margin-bottom: 30px;
+              font-size: 36px;
+            }
+            .desc {
+              color: @font-color;
+              font-size: 28px;
+            }
           }
-          .desc {
-            color: @font-color;
-            font-size: 28px;
+          &_right {
+            flex: 1;
+            .flex(@justify-content: flex-end);
+            color: @base-color;
           }
         }
-        &_right {
-          flex: 1;
-          .flex(@justify-content: flex-end);
-          color: @base-color;
+        .content {
+          box-sizing: border-box;
+          padding-top: 20px;
         }
-      }
-      .content {
-        margin-top: 20px;
       }
     }
+    
   }
 </style>

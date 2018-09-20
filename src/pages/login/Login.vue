@@ -1,32 +1,35 @@
 <template>
-  <div class="login">
-    <div class="back">
-      <span  @click="hanldeGoBack">
-         <svg-icon iconClass="return"></svg-icon>
-      </span>
-    </div>
-    <div class="logo">
-      <img src="./../../assets/images/logo.png" alt="">
-    </div>
-    <div class="input">
-      <div class="username">
-        <input type="text" class="username_ipt" placeholder="手机号" v-model="username">
+  <transition name="animate">
+    <div class="login">
+      <div class="back">
+        <span  @click="hanldeGoBack">
+          <svg-icon iconClass="return"></svg-icon>
+        </span>
       </div>
-      <div class="password">
-        <input type="password" placeholder="密码" v-model="password">
-        <svg-icon iconClass="eye" class="icon"></svg-icon>
+      <div class="logo">
+        <img src="./../../assets/images/logo.png" alt="">
+      </div>
+      <div class="input">
+        <div class="username">
+          <input type="text" class="username_ipt" placeholder="手机号" v-model="username">
+        </div>
+        <div class="password">
+          <input type="password" placeholder="密码" v-model="password">
+          <svg-icon iconClass="eye" class="icon"></svg-icon>
+        </div>
+      </div>
+      <div class="submit">
+        <button @click="hanldeLogin">登陆</button>
+      </div>
+      <div class="other">
+        <p class="txt">其他登陆方式</p>
+        <span><svg-icon iconClass="weibo"></svg-icon></span>
+        <span class="wechat"><svg-icon iconClass="wechat"></svg-icon></span>
+        <span><svg-icon iconClass="github"></svg-icon></span>
       </div>
     </div>
-    <div class="submit">
-      <button @click="hanldeLogin">登陆</button>
-    </div>
-    <div class="other">
-      <p class="txt">其他登陆方式</p>
-      <span><svg-icon iconClass="weibo"></svg-icon></span>
-      <span class="wechat"><svg-icon iconClass="wechat"></svg-icon></span>
-      <span><svg-icon iconClass="github"></svg-icon></span>
-    </div>
-  </div>
+  </transition>
+  
 </template>
 
 <script>
@@ -131,5 +134,11 @@ export default {
         margin: 0 40px;
       }
     }
+  }
+  .animate-enter-active, .animate-leave-active {
+    transition: all .5s;
+  }
+  .animate-enter, .animate-leave-to {
+    transform: translateX(100%);
   }
 </style>
