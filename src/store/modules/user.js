@@ -18,7 +18,8 @@ const user = {
         client_id: res.clientId,
         device_id: res.clientId,
         token: res.token,
-        uid: res.userId
+        uid: res.userId,
+        current_uid: res.userId
       }
       Local.set('auth', auth)
     }

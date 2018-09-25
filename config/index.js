@@ -24,6 +24,13 @@ module.exports = {
         pathRewrite: {
           '^/auth': '/'
         }
+      },
+      '/userinfo': {
+        target: 'https://user-storage-api-ms.juejin.im/v1',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/userinfo': '/'
+        }
       }
     },
 

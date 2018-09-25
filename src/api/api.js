@@ -16,7 +16,6 @@ class API extends Server {
   async getEntryByTimeline(params = {}) {
     try {
       let result = await this.axios('get', `/timeline/get_entry_by_timeline`, params)
-      console.log(result)
       if (result.status === 200) {
         return result.data
       }
@@ -37,12 +36,24 @@ class API extends Server {
   }
 
   // 登陆
-  async login(params = {}){
+  async login(params = {}) {
     try{
       let result = await this.axios('post', `/auth`, params)
       return result
     }catch(err){
       throw err;
+    }
+  }
+
+  // 获取个人信息
+  async getUserInfo(params = {}) {
+    try {
+      let result = await this.axios('get', `/userinfo/getUserInfo`, params)
+      if (result.status === 200) {
+        return result.data
+      }
+    } catch (err) {
+      throw err
     }
   }
 }

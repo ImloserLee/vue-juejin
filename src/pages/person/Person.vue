@@ -1,47 +1,124 @@
 <template>
   <div class="person">
     <header class="header">我</header>
-    <section class="information">
-      <div class="left">
-        <div class="avatar"></div>
-        <div class="info">
-          <p class="username">Panghuli</p>
-          <p class="job">前端</p>
-        </div>
-      </div>
-      <div class="right">
-        <span class="icon"><svg-icon iconClass="arrow-right"></svg-icon></span>
-      </div>
-    </section>
-    <section class="card">
-      <ul>
-        <li class="list" v-for="item in typeList" :key="item.icon">
-          <span class="item icon"><svg-icon :iconClass="item.icon"></svg-icon></span>
-          <span class="item">{{item.text}}</span>
-          <span class="item modifier">{{item.modifier}}</span>
-          <span class="item number">{{item.number}}</span>
-        </li>
-      </ul>
-    </section>
+    <scroll class="scroll">
+      <section class="section">
+        <section class="information">
+          <div class="left">
+            <div class="avatar">
+              <img :src="personData.avatarLarge" alt="">
+            </div>
+            <div class="info" v-if="auth.token">
+              <p class="username">{{personData.username}}</p>
+              <p class="job">{{personData.jobTitle}}</p>
+            </div>
+            <div class="info" v-else>
+              <p>登陆/注册</p>
+            </div>
+          </div>
+          <div class="right">
+            <span class="icon"><svg-icon iconClass="arrow-right"></svg-icon></span>
+          </div>
+        </section>
+        <section class="card">
+          <ul>
+            <li class="list">
+              <span class="item icon"><svg-icon iconClass="message"></svg-icon></span>
+              <span class="item">消息中心</span>
+              <span class="item modifier"></span>
+              <span class="item number"></span>
+            </li>
+            <li class="list">
+              <span class="item icon"><svg-icon iconClass="love"></svg-icon></span>
+              <span class="item">我喜欢的</span>
+              <span class="item modifier">篇</span>
+              <span class="item number">{{personData.collectedEntriesCount || 0}}</span>
+            </li>
+            <li class="list">
+              <span class="item icon"><svg-icon iconClass="collection"></svg-icon></span>
+              <span class="item">收藏集</span>
+              <span class="item modifier">个</span>
+              <span class="item number">{{personData.collectionSetCount || 0}}</span>
+            </li>
+            <li class="list">
+              <span class="item icon"><svg-icon iconClass="buy"></svg-icon></span>
+              <span class="item">已购小册</span>
+              <span class="item modifier">本</span>
+              <span class="item number">{{personData.purchasedBookletCount || 0}}</span>
+            </li>
+            <li class="list">
+              <span class="item icon"><svg-icon iconClass="feidian"></svg-icon></span>
+              <span class="item">赞过的沸点</span>
+              <span class="item modifier">篇</span>
+              <span class="item number">{{personData.likedPinCount || 0}}</span>
+            </li>
+            <li class="list">
+              <span class="item icon"><svg-icon iconClass="eye"></svg-icon></span>
+              <span class="item">阅读过的文章</span>
+              <span class="item modifier">篇</span>
+              <span class="item number">{{personData.viewedEntriesCount || 0}}</span>
+            </li>
+            <li class="list">
+              <span class="item icon"><svg-icon iconClass="tag"></svg-icon></span>
+              <span class="item">标签管理</span>
+              <span class="item modifier">个</span>
+              <span class="item number">{{personData.subscribedTagsCount || 0}}</span>
+            </li>
+          </ul>
+        </section>
+        <section class="card setting">
+          <ul>
+            <li class="list">
+              <span class="item icon"><svg-icon iconClass="feedback"></svg-icon></span>
+              <span class="item">意见反馈</span>
+            </li>
+            <li class="list">
+              <span class="item icon"><svg-icon iconClass="setting"></svg-icon></span>
+              <span class="item">设置</span>
+            </li>
+          </ul>
+        </section>
+      </section>
+    </scroll>
   </div>
 </template>
 
 <script>
+import API from 'api/api'
+import { mapGetters } from 'vuex'
+import Scroll from 'components/Scroll'
 export default {
   name: 'Person',
   data() {
     return {
-      typeList: [
-        {icon: 'message', text: '消息中心', number: 2, modifier: '条'},
-        {icon: 'love', text: '我喜欢的', number: 2, modifier: '篇'},
-        {icon: 'collection', text: '收藏集', number: 2, modifier: '个'},
-        {icon: 'buy', text: '已购小册', number: 2, modifier: '本'},
-        {icon: 'money', text: '我的钱包', number: 2, modifier: ''},
-        {icon: 'feidian', text: '赞过的沸点', number: 2, modifier: '篇'},
-        {icon: 'eye', text: '阅读过的文章', number: 2, modifier: '篇'},
-        {icon: 'tag', text: '标签管理', number: 2, modifier: '个'},
-      ]
+      personData: {}
     }
+  },
+  components: {
+    Scroll
+  },
+  created() {
+    this.getUserInfo()
+  },
+  methods: {
+    async getUserInfo() {
+      let data = {
+        params: {
+          src: 'web',
+          ...this.auth
+        }
+      }
+      let res = await API.getUserInfo(data)
+      if (res.m === 'ok') {
+        this.personData = res.d
+        console.log(res.d)
+      }
+    }
+  },
+  computed: {
+    ...mapGetters([
+      'auth'
+    ])
   }
 }
 </script>
@@ -49,6 +126,7 @@ export default {
 <style lang="less" scoped>
   @import '~style/mixin.less';
   .person {
+    position: relative;
     width: 100%;
     height: 100%;
     .header {
@@ -58,65 +136,80 @@ export default {
       border-bottom: 1px solid #c7c5c5;
       background-color: @bg-color;
     }
-    .information {
-      padding: 40px;
-      margin: 40px 0;
-      .flex();
-      height: 200px;
-      box-sizing: border-box;
-      background-color: #fff;
-      .left {
-        flex: 2;
-        .avatar {
-          float: left;
-          width: 110px;
-          height: 110px;
-          border-radius: 100%;
-          background-color: red;
+    .scroll {
+      height: calc(100vh - 200px);
+      overflow: hidden;
+      .section {
+        padding: 40px 0;
+        .information {
+          padding: 40px;
+          .flex();
+          height: 200px;
+          box-sizing: border-box;
+          background-color: #fff;
+          .left {
+            flex: 2;
+            .avatar {
+              float: left;
+              width: 110px;
+              height: 110px;
+              border-radius: 100%;
+              overflow: hidden;
+              img {
+                width: 100%;
+                height: 100%;
+              }
+            }
+            .info {
+              float: left;
+              margin-left: 35px;
+              width: 200px;
+              height: 110px;
+              .username {
+                margin-top: 8px;
+                margin-bottom: 18px;
+                font-size: 36px;
+              }
+              .job {
+                color: @font-color;
+                font-size: 32px;
+              }
+            }
+          }
+          .right {
+            flex: 1;
+            .icon {
+              float: right;
+            }
+          }
         }
-        .info {
-          float: left;
-          margin-left: 15px;
-          width: 200px;
-          height: 110px;
-          background-color: yellow;
-          .username {
-            margin-bottom: 18px;
-            font-size: 36px;
+        .card {
+          margin-top: 40px;
+          font-size: 32px;
+          background-color: #fff;
+          .list {
+            height: 94px;
+            line-height: 94px;
+            padding: 0 40px;
+            border-bottom: 1px solid @border-color;
+            .item {
+              float: left;
+              &.icon {
+                margin-right: 50px;
+                font-size: 48px;
+              }
+              &.number {
+                float: right;
+                color: @font-color;
+              }
+              &.modifier {
+                float: right;
+                color: @font-color;
+              }
+            }
           }
-          .job {
-            color: @font-color;
-            font-size: 32px;
-          }
-        }
-      }
-      .right {
-        flex: 1;
-        .icon {
-          float: right;
-        }
-      }
-    }
-    .card {
-      padding: 0 40px;
-      font-size: 32px;
-      background-color: #fff;
-      .list {
-        height: 94px;
-        line-height: 94px;
-        .item {
-          float: left;
-          &.icon {
-            margin-right: 50px;
-            font-size: 48px;
-          }
-          &.number {
-            float: right;
-            color: @font-color;
-          }
-          &.modifier {
-            float: right;
-            color: @font-color;
+          &.setting {
+            margin-top: 40px;
           }
         }
       }
