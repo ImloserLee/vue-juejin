@@ -56,6 +56,18 @@ class API extends Server {
       throw err
     }
   }
+
+  // 获取小册信息
+  async getBrochureInfo(params = {}) {
+    try {
+      let result = await this.axios('get', `/brochure/getListByLastTime`, params)
+      if (result.status === 200) {
+        return result.data
+      }
+    } catch (err) {
+      throw err
+    }
+  }
 }
 
 export default new API()

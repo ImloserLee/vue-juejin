@@ -4,7 +4,7 @@ const _import_ = file => () => import('pages/' + file + '.vue')
 
 Vue.use(Router)
 
-export default new Router({
+export const router = new Router({
   routes: [
     {
       path: '/home',
@@ -24,7 +24,18 @@ export default new Router({
     {
       path: '/brochure',
       name: 'Brochure',
-      component: _import_('brochure/Brochure')
+      component: _import_('brochure/Brochure'),
+      redirect: '/brochure/all',
+      children: [
+        {
+          path: 'all',
+          component: _import_('brochure/component/All')
+        },
+        {
+          path: 'already',
+          component: _import_('brochure/component/Already')
+        },
+      ]
     },
     {
       path: '/person',

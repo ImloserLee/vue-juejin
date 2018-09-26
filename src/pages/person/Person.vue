@@ -3,24 +3,25 @@
     <header class="header">我</header>
     <scroll class="scroll">
       <section class="section">
-        <section class="information">
+        <div class="information">
           <div class="left">
             <div class="avatar">
-              <img :src="personData.avatarLarge" alt="">
+              <img :src="personData.avatarLarge" alt="" v-if="auth">
+              <img src="./../../assets/images/avatar.png" alt="" v-else>
             </div>
-            <div class="info" v-if="auth.token">
+            <div class="info" v-if="auth">
               <p class="username">{{personData.username}}</p>
               <p class="job">{{personData.jobTitle}}</p>
             </div>
             <div class="info" v-else>
-              <p>登陆/注册</p>
+              <p class="text" @click="handleToLogin">登陆/注册</p>
             </div>
           </div>
           <div class="right">
             <span class="icon"><svg-icon iconClass="arrow-right"></svg-icon></span>
           </div>
-        </section>
-        <section class="card">
+        </div>
+        <div class="card">
           <ul>
             <li class="list">
               <span class="item icon"><svg-icon iconClass="message"></svg-icon></span>
@@ -65,8 +66,8 @@
               <span class="item number">{{personData.subscribedTagsCount || 0}}</span>
             </li>
           </ul>
-        </section>
-        <section class="card setting">
+        </div>
+        <div class="card setting">
           <ul>
             <li class="list">
               <span class="item icon"><svg-icon iconClass="feedback"></svg-icon></span>
@@ -77,7 +78,7 @@
               <span class="item">设置</span>
             </li>
           </ul>
-        </section>
+        </div>
       </section>
     </scroll>
   </div>
@@ -111,8 +112,10 @@ export default {
       let res = await API.getUserInfo(data)
       if (res.m === 'ok') {
         this.personData = res.d
-        console.log(res.d)
       }
+    },
+    handleToLogin() {
+      this.$router.push({path: '/login'})
     }
   },
   computed: {
@@ -132,7 +135,7 @@ export default {
     .header {
       .flex();
       height: 100px;
-      font-size: 48px;
+      font-size: 36px;
       border-bottom: 1px solid #c7c5c5;
       background-color: @bg-color;
     }
@@ -173,6 +176,10 @@ export default {
               .job {
                 color: @font-color;
                 font-size: 32px;
+              }
+              .text {
+                margin-top: 30px;
+                font-size: 36px;
               }
             }
           }

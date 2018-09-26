@@ -14,9 +14,14 @@
       </div>
     </div>
     <div class="content">
-      <h4>{{timeline.title}}</h4>
-      <div class="text">
-        <p>{{timeline.content}}</p>
+      <div class="content_left">
+        <h4>{{timeline.title}}</h4>
+        <div class="text">
+          <p>{{timeline.content}}</p>
+        </div>
+      </div>
+      <div class="content_right" v-if="timeline.screenshot">
+        <img :src="timeline.screenshot" alt="">
       </div>
     </div>
     <div class="bar">
@@ -57,10 +62,8 @@ export default {
 <style lang="less" scoped>
   @import '~style/mixin.less';
   .panel {
-    margin-top: 20px;
     padding: 40px 40px;
     width: 100%;
-    height: 374px;
     background-color: #fff;
     .header {
       margin-bottom: 30px;
@@ -90,14 +93,25 @@ export default {
       }
     }
     .content {
+      .flex(@align-item: flex-start);
       font-size: 32px;
-      .text {
-        margin-top: 20px;
-        color: #4E5154;
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 3;
-        overflow: hidden;
+      &_left {
+        flex: 3;
+        .text {
+          margin-top: 20px;
+          color: #4E5154;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 3;
+          overflow: hidden;
+        }
+      }
+      &_right {
+        flex:1;
+        img {
+          width:100%;
+          height: 100%;
+        }
       }
     }
     .bar {

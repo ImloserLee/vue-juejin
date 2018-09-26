@@ -31,6 +31,13 @@ module.exports = {
         pathRewrite: {
           '^/userinfo': '/'
         }
+      },
+      '/brochure': {
+        target: 'https://xiaoce-timeline-api-ms.juejin.im/v1',
+        changeOrigin: true,
+        pathRewrite: {
+          '/brochure': '/'
+        }
       }
     },
 

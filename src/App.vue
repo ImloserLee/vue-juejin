@@ -114,11 +114,11 @@ export default {
           font-size: 24px;
           color: @font-color;
         }
-      &.router-link-active {
-        .txt {
-          color: @base-color;
+        &.router-link-active {
+          .txt {
+            color: @base-color;
+          }
         }
-      }
       }
     }
   }

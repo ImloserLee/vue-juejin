@@ -12,16 +12,16 @@
             <span class="login" @click="handleToLogin">登陆</span>
           </div>
         </div>
-        <div class="content">
-          <hot-recomment 
-            v-if="showHotRecomment && hotRecommentData.length"
-            :recomment="hotRecommentData"
-            :rotate="rotate"
-            @closeRecomment="handleColseRecomment"
-            @refreshRecomment="handleRefreshRecomment"
-          >
-          </hot-recomment>
-          <item-pane :timeline="item" v-for="item in timelineData" :key="item.objectId"></item-pane>
+        <hot-recomment 
+          v-if="showHotRecomment && hotRecommentData.length"
+          :recomment="hotRecommentData"
+          :rotate="rotate"
+          @closeRecomment="handleColseRecomment"
+          @refreshRecomment="handleRefreshRecomment"
+        >
+        </hot-recomment>
+        <div v-for="item in timelineData" :key="item.objectId" class="time_panel">
+          <item-pane :timeline="item"></item-pane>
         </div>
       </section>
     </scroll>
@@ -30,8 +30,8 @@
 
 <script>
 import Scroll from 'components/Scroll'
-import VHeader from './header/header'
-import ItemPane from './itempanel/ItemPanel'
+import VHeader from './component/header'
+import ItemPane from './component/ItemPanel'
 import HotRecomment from 'components/HotRecomment'
 import { mapGetters } from 'vuex'
 import API from 'api/api'
@@ -52,8 +52,7 @@ export default {
     VHeader,
     ItemPane
   },
-  created() {
-    // console.log(this.auth)
+  mounted() {
     this.getEntryByHotRecomment()
     this.getEntryByTimeline()
   },
@@ -139,9 +138,9 @@ export default {
       height: calc(100vh - 200px);
       overflow: hidden;
       .section {
+        padding-top: 20px;
         .logincard {
-          .flex;
-          margin-top: 20px;
+          .flex();
           padding: 0 40px;
           height: 140px;
           font-size: 36px;
@@ -163,10 +162,10 @@ export default {
             color: @base-color;
           }
         }
-        .content {
-          box-sizing: border-box;
+        .time_panel {
           padding-top: 20px;
         }
+
       }
     }
     
