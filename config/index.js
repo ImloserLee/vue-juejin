@@ -38,7 +38,14 @@ module.exports = {
         pathRewrite: {
           '/brochure': '/'
         }
-      }
+      },
+      '/banner': {
+        target: 'https://banner-storage-ms.juejin.im/v1',
+        changeOrigin: true,
+        pathRewrite: {
+          '/banner': '/'
+        }
+      },
     },
 
     // Various Dev Server settings

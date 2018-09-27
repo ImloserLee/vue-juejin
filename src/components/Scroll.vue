@@ -24,6 +24,22 @@ export default {
     click: {
       type: Boolean,
       default: true
+    },
+    pullup: {
+      type: Boolean,
+      default: false
+    },
+    pulldown: {
+      type: Boolean,
+      default: false
+    },
+    pullDownRefresh: {
+      type: null,
+      default: false
+    },
+    scrollbar: {
+      type: null,
+      default: false
     }
   },
   mounted() {
@@ -37,11 +53,28 @@ export default {
       this.scroll = new BScroll(this.$refs.wrapper, {
         probeType: this.probeType,
         scrollX: this.scrollX,
-        click: this.click
+        click: this.click,
+        scrollbar: this.scrollbar,
+        pullDownRefresh: this.pullDownRefresh,
       })
+      if (this.pullup) {
+        this.scroll.on('scrollEnd', () => {
+          if (this.scroll.y <= (this.scroll.maxScrollY + 50)) {
+            this.$emit('scrollToEnd')
+          }
+        })
+      }
+      if (this.pullDownRefresh) {
+        this._initPullDownRefresh()
+      }
     },
     refresh() {
       this.scroll && this.scroll.refresh()
+    },
+    _initPullDownRefresh() {
+      this.scroll.on('pullingDown', () => {
+        this.$emit('pullingDown')
+      })
     }
   },
   watch: {

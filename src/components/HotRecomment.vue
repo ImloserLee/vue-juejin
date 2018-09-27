@@ -2,10 +2,10 @@
   <section class="hot">
     <div class="title">
       <div class="title_left">
-        <svg-icon iconClass="home-hot"></svg-icon>
-        <span class="txt">热门推荐</span>
+        <svg-icon :iconClass="iconName"></svg-icon>
+        <slot name="text"></slot>
       </div>
-      <div class="title_right">
+      <div class="title_right" v-if="hasRight">
         <span class="l" @click="handleRefreshRecomment">
           <svg-icon iconClass="refresh" :class="[rotate ? 'rotate' : '', 'icon-refresh']"></svg-icon>
         </span>
@@ -41,6 +41,14 @@ export default {
     rotate: {
       type: Boolean,
       default: false
+    },
+    iconName: {
+      type: String,
+      default: 'home-hot'
+    },
+    hasRight: {
+      type: Boolean,
+      default: true
     }
   },
   methods: {

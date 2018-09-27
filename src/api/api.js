@@ -68,6 +68,30 @@ class API extends Server {
       throw err
     }
   }
+
+  // 获取搜索页banner
+  async getBannerImgList(params = {}) {
+    try {
+      let result = await this.axios('get', `/banner/get_banner`, params)
+      if (result.status === 200) {
+        return result.data
+      }
+    } catch (err) {
+      throw err
+    }
+  }
+
+  // 获取搜索页热门文章
+  async getEntryByRank(params = {}) {
+    try {
+      let result = await this.axios('get', `/timeline/get_entry_by_rank`, params)
+      if (result.status === 200) {
+        return result.data
+      }
+    } catch (err) {
+      throw err
+    }
+  }
 }
 
 export default new API()

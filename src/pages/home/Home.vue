@@ -19,6 +19,7 @@
           @closeRecomment="handleColseRecomment"
           @refreshRecomment="handleRefreshRecomment"
         >
+          <span slot="text" class="txt">热门推荐</span>
         </hot-recomment>
         <div v-for="item in timelineData" :key="item.objectId" class="time_panel">
           <item-pane :timeline="item"></item-pane>
