@@ -7,12 +7,12 @@
     <scroll 
       ref="scroll"
       class="scroll"
-      :pullup="pullup"
       :data="rankList"
       :scrollbar="scrollbarObj"
       :pullDownRefresh="pullDownRefreshObj"
-      @scrollToEnd="handlePullUp"
+      :pullUpLoad="pullUpLoadObj"
       @pullingDown="handlePullDown"
+      @pullingUp="handlePullUp"
     >
       <div class="content">
         <search-swiper :list="bannerList"></search-swiper>
@@ -45,15 +45,18 @@ export default {
   },
   data() {
     return {
-      scrollbar: true,
-      scrollbarFade: true,
       bannerList: [],
       hasRightIcon: false,
       rankList: [],
-      pullup: true,
+      scrollbar: true,
+      scrollbarFade: true,
       pullDownRefresh: true,
       pullDownRefreshThreshold: 90,
       pullDownRefreshStop: 40,
+      pullUpLoad: true,
+      pullUpLoadThreshold: 0,
+      pullUpLoadMoreTxt: '正在加载',
+      pullUpLoadNoMoreTxt: '暂无更多数据'
     }
   },
   mounted() {
@@ -104,7 +107,7 @@ export default {
       this.getEntryByRank()
     },
     handlePullDown() {
-      console.log('eeee')
+      this.getEntryByRank(true)
     },
     rebuildScroll() {
       Vue.nextTick(() => {
@@ -123,12 +126,24 @@ export default {
         stop: parseInt(this.pullDownRefreshStop)
       } : false
     },
+    pullUpLoadObj: function () {
+      return this.pullUpLoad ? {
+        threshold: parseInt(this.pullUpLoadThreshold),
+        txt: {more: this.pullUpLoadMoreTxt, noMore: this.pullUpLoadNoMoreTxt}
+      } : false
+    },
     ...mapGetters([
       'auth'
     ])
   },
   watch: {
     scrollbarObj: {
+      handler() {
+        this.rebuildScroll()
+      },
+      deep: true
+    },
+    pullUpLoadObj: {
       handler() {
         this.rebuildScroll()
       },
@@ -169,7 +184,6 @@ export default {
     .scroll {
       width: 100%;
       height: calc(100vh - 200px);
-      overflow: hidden;
       .hot {
         font-size: 32px;
       }
