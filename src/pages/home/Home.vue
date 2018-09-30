@@ -1,8 +1,16 @@
 <template>
   <div class="home">
     <v-header></v-header>
-    <scroll class="scroll">
-      <section class="section">
+    <scroll 
+      ref="scroll"
+      class="scroll"
+      :data="timelineData"
+      :scrollbar="scrollbarObj"
+      :pullDownRefresh="pullDownRefreshObj"
+      :pullUpLoad="pullUpLoadObj"
+      @pullingDown="handlePullDown"
+      @pullingUp="handlePullUp">
+      <div class="section">
         <div class="logincard" v-if="!isLogin">
           <div class="logincard_left">
             <p class="title">登陆账号</p>
@@ -21,20 +29,20 @@
         >
           <span slot="text" class="txt">热门推荐</span>
         </hot-recomment>
-        <div v-for="item in timelineData" :key="item.objectId" class="time_panel">
-          <item-pane :timeline="item"></item-pane>
-        </div>
-      </section>
+        <item-pane :timeline="timelineData" @toDetail="handleToDetail"></item-pane>
+      </div>
     </scroll>
   </div>
 </template>
 
 <script>
+import Vue from 'vue'
 import Scroll from 'components/Scroll'
-import VHeader from './component/header'
+import VHeader from './component/Header'
 import ItemPane from './component/ItemPanel'
 import HotRecomment from 'components/HotRecomment'
 import { mapGetters } from 'vuex'
+import { ScrollConfig } from 'utils/scrollConfig'
 import API from 'api/api'
 const LIMIT = 20
 export default {
@@ -44,18 +52,22 @@ export default {
       hotRecommentData: [],
       timelineData: [],
       showHotRecomment: true,
-      rotate: false
+      rotate: false,
+      scrollbar: true,
+      scrollbarFade: true,
+      pullDownRefresh: true,
+      pullUpLoad: true
     }
   },
   components: {
     HotRecomment,
     Scroll,
     VHeader,
-    ItemPane
+    ItemPane,
   },
   mounted() {
     this.getEntryByHotRecomment()
-    this.getEntryByTimeline()
+    this.getEntryByTimeline(true)
   },
   methods: {
     // 获取热门信息
@@ -73,29 +85,6 @@ export default {
       }
     },
 
-    // 获取首页内容
-    async getEntryByTimeline() {
-      let data = {
-        params: {
-          src: 'web',
-          limit: LIMIT,
-          category: 'all',
-          recomment: 1,
-          before: ''
-        }
-      }
-      let res = await API.getEntryByTimeline(data)
-      if (res.m === 'ok') {
-        this.timelineData = res.d.entrylist
-      }
-    },
-    // 前往登陆页面
-    handleToLogin() {
-      this.$router.push({ path: '/login'})
-    },
-    handleColseRecomment() {
-      this.showHotRecomment = false
-    },
     // 刷新热门信息 热门推荐点击刷新，将当前的 3 条文章 objectId 以 id|id|id 的格式发送请求，然后重新拉取热门推荐列表
     async handleRefreshRecomment() {
       this.rotate = true
@@ -118,13 +107,89 @@ export default {
       if (res.m === 'ok') {
         this.getEntryByHotRecomment()
       }
+    }, 
+
+    // 获取首页内容
+    async getEntryByTimeline(reload) {
+      let timeline = this.timelineData
+      if (!timeline.length || reload) {
+        timeline = [{ verifyCreatedAt: '' }]
+      }
+      let rankIndex = timeline.slice(-1)[0].verifyCreatedAt || ''
+      let data = {
+        params: {
+          src: 'ios',
+          limit: LIMIT,
+          before: rankIndex,
+          ...this.auth
+        }
+      }
+      let res = await API.getEntryByTimeline(data)
+      if (res.m === 'ok') {
+        let entrylist = res.d.entrylist ? res.d.entrylist : []
+        this.timelineData = reload ? entrylist : this.timelineData.concat(entrylist.slice(1))
+      }
+    },
+    // 前往登陆页面
+    handleToLogin() {
+      this.$router.push({ path: '/login'})
+    },
+    handleColseRecomment() {
+      this.showHotRecomment = false
+    },
+    
+    handlePullDown() {
+      this.getEntryByTimeline(true)
+    },
+    handlePullUp() {
+      this.getEntryByTimeline()
+    },
+    handleToDetail(params) {
+      console.log(params)
+      this.$router.push({ path: '/detail', query: { id: params.id, type: params.type } })
+    },
+    rebuildScroll() {
+      Vue.nextTick(() => {
+        this.$refs.scroll.destroy()
+        this.$refs.scroll.initScroll()
+      })
     }
   },
   computed: {
+    scrollbarObj: function () {
+      return this.scrollbar ? {fade: this.scrollbarFade} : false
+    },
+    pullDownRefreshObj: function () {
+      return this.pullDownRefresh ? {
+        threshold: parseInt(ScrollConfig.pullDownRefreshThreshold),
+        stop: parseInt(ScrollConfig.pullDownRefreshStop),
+        txt: ScrollConfig.pullDownRefreshTxt
+      } : false
+    },
+    pullUpLoadObj: function () {
+      return this.pullUpLoad ? {
+        threshold: parseInt(ScrollConfig.pullUpLoadThreshold),
+        txt: {more: ScrollConfig.pullUpLoadMoreTxt, noMore: ScrollConfig.pullUpLoadNoMoreTxt}
+      } : false
+    },
     ...mapGetters([
       'isLogin',
       'auth'
     ])
+  },
+  watch: {
+    scrollbarObj: {
+      handler() {
+        this.rebuildScroll()
+      },
+      deep: true
+    },
+    pullUpLoadObj: {
+      handler() {
+        this.rebuildScroll()
+      },
+      deep: true
+    }
   }
 }
 </script>

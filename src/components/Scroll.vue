@@ -323,6 +323,7 @@
     .after-trigger {
       margin-top: 10px;
       font-size: 28px;
+      color: #A8B4BF;
     }
   }
   .pullup-wrapper {
@@ -330,7 +331,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 16px 0;
+    padding: 32px 0;
     font-size: 28px;
+    color: #A8B4BF;
   }
 </style>

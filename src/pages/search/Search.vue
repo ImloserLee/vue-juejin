@@ -36,6 +36,7 @@ import HotRecomment from 'components/HotRecomment'
 import Scroll from 'components/Scroll'
 import API from 'api/api'
 import { mapGetters } from 'vuex'
+import { ScrollConfig } from 'utils/scrollConfig'
 export default {
   name: 'Search',
   components: {
@@ -51,12 +52,7 @@ export default {
       scrollbar: true,
       scrollbarFade: true,
       pullDownRefresh: true,
-      pullDownRefreshThreshold: 90,
-      pullDownRefreshStop: 40,
-      pullUpLoad: true,
-      pullUpLoadThreshold: 0,
-      pullUpLoadMoreTxt: '正在加载',
-      pullUpLoadNoMoreTxt: '暂无更多数据'
+      pullUpLoad: true
     }
   },
   mounted() {
@@ -89,7 +85,7 @@ export default {
       let rankIndex = (rankList.slice(-1)[0].rankIndex) || ''
       let data = {
         params: {
-          src: 'web',
+          src: 'ios',
           limit: 20,
           uid: this.auth.uid || 'unlogin',
           device_id: this.auth.device_id,
@@ -122,14 +118,15 @@ export default {
     },
     pullDownRefreshObj: function () {
       return this.pullDownRefresh ? {
-        threshold: parseInt(this.pullDownRefreshThreshold),
-        stop: parseInt(this.pullDownRefreshStop)
+        threshold: parseInt(ScrollConfig.pullDownRefreshThreshold),
+        stop: parseInt(ScrollConfig.pullDownRefreshStop),
+        txt: ScrollConfig.pullDownRefreshTxt
       } : false
     },
     pullUpLoadObj: function () {
       return this.pullUpLoad ? {
-        threshold: parseInt(this.pullUpLoadThreshold),
-        txt: {more: this.pullUpLoadMoreTxt, noMore: this.pullUpLoadNoMoreTxt}
+        threshold: parseInt(ScrollConfig.pullUpLoadThreshold),
+        txt: {more: ScrollConfig.pullUpLoadMoreTxt, noMore: ScrollConfig.pullUpLoadNoMoreTxt}
       } : false
     },
     ...mapGetters([

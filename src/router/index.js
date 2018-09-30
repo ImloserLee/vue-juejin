@@ -51,6 +51,11 @@ export const router = new Router({
       component: _import_('login/Login')
     },
     {
+      path: '/detail',
+      name: 'Detail',
+      component: _import_('detail/Detail')
+    },
+    {
       path: '/',
       redirect: '/home',
       component: _import_('home/Home')

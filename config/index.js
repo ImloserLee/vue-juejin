@@ -46,6 +46,13 @@ module.exports = {
           '/banner': '/'
         }
       },
+      '/storage': {
+        target: 'https://post-storage-api-ms.juejin.im/v1',
+        changeOrigin: true,
+        pathRewrite: {
+          '/storage': '/'
+        }
+      },
     },
 
     // Various Dev Server settings

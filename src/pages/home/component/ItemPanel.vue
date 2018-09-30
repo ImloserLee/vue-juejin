@@ -1,49 +1,53 @@
 <template>
-  <div class="panel">
-    <div class="header">
-      <div class="header_left">
-        <div class="avatar">
-          <img :src="timeline.user.avatarLarge" />
+  <ul>
+    <li v-for="item in timeline" :key="item.objectId" class="list">
+      <div class="panel" @click="handleToDetail(item)">
+        <div class="header">
+          <div class="header_left">
+            <div class="avatar">
+              <img :src="item.user.avatarLarge" />
+            </div>
+            <div class="name">
+              {{item.user.username}}
+            </div>
+          </div>
+          <div class="header_right">
+            <span>{{item.tags | splitTag}}</span>
+          </div>
         </div>
-        <div class="name">
-          {{timeline.user.username}}
+        <div class="content">
+          <div class="content_left">
+            <h4>{{item.title}}</h4>
+            <div class="text">
+              <p>{{item.content}}</p>
+            </div>
+          </div>
+          <div class="content_right" v-if="item.screenshot">
+            <img :src="item.screenshot" alt="">
+          </div>
+        </div>
+        <div class="bar">
+          <div class="live">
+            <span class="icon"><svg-icon iconClass="like"></svg-icon></span>
+            <span class="text">20</span>
+          </div>
+          <div class="comment">
+            <span class="icon"><svg-icon iconClass="comment"></svg-icon></span>
+            <span class="text">评论</span>
+          </div>
         </div>
       </div>
-      <div class="header_right">
-        <span>{{timeline.tags | splitTag}}</span>
-      </div>
-    </div>
-    <div class="content">
-      <div class="content_left">
-        <h4>{{timeline.title}}</h4>
-        <div class="text">
-          <p>{{timeline.content}}</p>
-        </div>
-      </div>
-      <div class="content_right" v-if="timeline.screenshot">
-        <img :src="timeline.screenshot" alt="">
-      </div>
-    </div>
-    <div class="bar">
-      <div class="live">
-        <span class="icon"><svg-icon iconClass="like"></svg-icon></span>
-        <span class="text">20</span>
-      </div>
-      <div class="comment">
-        <span class="icon"><svg-icon iconClass="comment"></svg-icon></span>
-        <span class="text">评论</span>
-      </div>
-    </div>
-  </div>
+    </li>
+  </ul>
 </template>
 
 <script>
 export default {
   props: {
     timeline: {
-      type: Object,
+      type: Array,
       default: function() {
-        return {}
+        return []
       }
     }
   },
@@ -55,12 +59,44 @@ export default {
       }).join('/')
       return tag
     }
+  },
+  methods: {
+    // 详情页需要的参数根据type值不同进行区分
+    // type = 1 传postId type = 2 传递objectId
+    handleToDetail(item) {
+      let postId = this.handleGetUrlParam(item.originalUrl)
+      let objectId = item.objectId
+      let type = item.type
+      let id = type === 'post' ? postId : objectId
+      let params = {
+        id: id,
+        type: type
+      }
+      this.$emit('toDetail', params)
+    },
+    /**
+     * 获取url中参数POSTID的值
+     * @params url {string} 请求地址
+     */
+    handleGetUrlParam(url) {
+      let urlArr = url.split('//')
+      let start = urlArr[1].indexOf('/') + 1
+      let relUrl = urlArr[1].substring(start)
+      if (relUrl.indexOf('?') !== -1) {
+        relUrl = relUrl.split('?')[0]
+      }
+      let postId = relUrl.split('/').slice(-1)[0]
+      return postId
+    }
   }
 }
 </script>
 
 <style lang="less" scoped>
   @import '~style/mixin.less';
+  .list {
+    padding-top: 20px;
+  }
   .panel {
     padding: 40px 40px;
     width: 100%;

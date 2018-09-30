@@ -92,6 +92,19 @@ class API extends Server {
       throw err
     }
   }
+
+  // 获取详情页内容
+  async getDetailData(params = {}) {
+    try {
+      let result = await this.axios('get', `/storage/getDetailData`, params)
+      if (result.status === 200) {
+        return result.data
+      }
+    } catch (err) {
+      throw err
+    }
+  }
+
 }
 
 export default new API()
