@@ -19,7 +19,6 @@ export default {
 
 <style lang="less" scoped>
   @import '~style/mixin.less';
-
   .header {
     position: relative;
     height: 100px;

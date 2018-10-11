@@ -15,7 +15,6 @@ const user = {
     LOGIN(state, data) {
       let res = data.data
       let auth = {
-        client_id: res.clientId,
         device_id: res.clientId,
         token: res.token,
         uid: res.userId,

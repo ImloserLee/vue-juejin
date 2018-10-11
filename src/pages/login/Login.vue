@@ -135,10 +135,5 @@ export default {
       }
     }
   }
-  .animate-enter-active, .animate-leave-active {
-    transition: all .5s;
-  }
-  .animate-enter, .animate-leave-to {
-    transform: translateX(100%);
-  }
+  
 </style>

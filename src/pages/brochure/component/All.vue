@@ -1,5 +1,13 @@
 <template>
-  <scroll class="scroll">
+  <scroll 
+      ref="scroll"
+      class="scroll"
+      :data="brochureList"
+      :scrollbar="scrollbarObj"
+      :pullDownRefresh="pullDownRefreshObj"
+      :pullUpLoad="pullUpLoadObj"
+      @pullingDown="handlePullDown"
+      @pullingUp="handlePullUp">
     <div class="all">
       <div class="card" v-for="item in brochureList" :key="item._id">
         <div class="left">
@@ -22,39 +30,93 @@
 import API from 'api/api'
 import { mapGetters } from 'vuex'
 import Scroll from 'components/Scroll'
+import { ScrollConfig } from 'utils/scrollConfig'
 export default {
   name: 'All',
   data() {
     return {
       pageNum: 1,
-      brochureList: []
+      brochureList: [],
+      scrollbar: true,
+      scrollbarFade: true,
+      pullDownRefresh: true,
+      pullUpLoad: true
     }
   },
   components: {
     Scroll
   },
-  created() {
-    this.getBrochureInfo()
+  mounted() {
+    this.getBrochureInfo(true)
   },
   methods: {
-    async getBrochureInfo() {
+    async getBrochureInfo(reload) {
+      // 下拉刷新页数自增
+      if (!reload) {
+        this.pageNum ++
+      }
+      let pageNum = this.pageNum
       let data = {
         params: {
-          src: 'web',
-          pageNum: this.pageNum,
+          src: 'ios',
+          pageNum: pageNum,
           ...this.auth
         }
       }
       let res = await API.getBrochureInfo(data)
-      if (res.m === 'ok') {
-        this.brochureList = res.d
+      if (res.s === 1) {
+        this.brochureList = reload ? res.d : this.brochureList.concat(res.d.slice(1))
+      } else {
+        this.$refs.scroll.forceUpdate()
       }
+    },
+    handlePullDown() {
+      this.getBrochureInfo(true)
+    },
+    handlePullUp() {
+      this.getBrochureInfo()
+    },
+    rebuildScroll() {
+      Vue.nextTick(() => {
+        this.$refs.scroll.destroy()
+        this.$refs.scroll.initScroll()
+      })
     }
   },
   computed: {
+    scrollbarObj: function () {
+      return this.scrollbar ? {fade: this.scrollbarFade} : false
+    },
+    pullDownRefreshObj: function () {
+      return this.pullDownRefresh ? {
+        threshold: parseInt(ScrollConfig.pullDownRefreshThreshold),
+        stop: parseInt(ScrollConfig.pullDownRefreshStop),
+        txt: ScrollConfig.pullDownRefreshTxt
+      } : false
+    },
+    pullUpLoadObj: function () {
+      return this.pullUpLoad ? {
+        threshold: parseInt(ScrollConfig.pullUpLoadThreshold),
+        txt: {more: ScrollConfig.pullUpLoadMoreTxt, noMore: ScrollConfig.pullUpLoadNoMoreTxt}
+      } : false
+    },
     ...mapGetters([
       'auth'
     ])
+  },
+  watch: {
+    scrollbarObj: {
+      handler() {
+        this.rebuildScroll()
+      },
+      deep: true
+    },
+    pullUpLoadObj: {
+      handler() {
+        this.rebuildScroll()
+      },
+      deep: true
+    }
   }
 }
 </script>

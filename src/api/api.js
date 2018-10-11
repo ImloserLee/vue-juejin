@@ -105,6 +105,53 @@ class API extends Server {
     }
   }
 
+  // 获取已关注话题
+  async getFollowedTopicList(params = {}) {
+    try {
+      let result = await this.axios('get', `/short/topicList/followed`, params)
+      if (result.status === 200) {
+        return result.data
+      }
+    } catch (err) {
+      throw err
+    }
+  }
+
+  // 获取更多话题
+  async getUnFollowedTopicList(params = {}) {
+    try {
+      let result = await this.axios('get', `/short/topicList/unfollowed`, params)
+      if (result.status === 200) {
+        return result.data
+      }
+    } catch (err) {
+      throw err
+    }
+  }
+
+  // 沸点页推荐栏banner数据
+  async getHotRecommendList(params = {}) {
+    try {
+      let result = await this.axios('get', `/short/getHotRecommendList`, params)
+      if (result.status === 200) {
+        return result.data
+      }
+    } catch (err) {
+      throw err
+    }
+  }
+
+  // 沸点页数据
+  async getPinList(params = {}) {
+    try {
+      let result = await this.axios('get', `/short/pinList/recommend`, params)
+      if (result.status === 200) {
+        return result.data
+      }
+    } catch (err) {
+      throw err
+    }
+  }
 }
 
 export default new API()

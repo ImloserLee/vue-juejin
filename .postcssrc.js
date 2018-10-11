@@ -4,6 +4,7 @@ module.exports = {
   "plugins": {
     "postcss-import": {},
     "postcss-url": {},
+    "postcss-write-svg": { utf8: false },
     // to edit target browsers: use "browserslist" field in package.json
     "autoprefixer": {}
   }

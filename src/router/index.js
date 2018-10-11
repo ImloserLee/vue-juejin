@@ -19,7 +19,22 @@ export const router = new Router({
     {
       path: '/boil',
       name: 'Boil',
-      component: _import_('boilpoint/BoilPoint')
+      component: _import_('boilpoint/BoilPoint'),
+      redirect: '/boil/topic',
+      children: [
+        {
+          path: 'topic',
+          component: _import_('boilpoint/component/Topic')
+        },
+        {
+          path: 'recomment',
+          component: _import_('boilpoint/component/Recomment')
+        },
+        {
+          path: 'dynamic',
+          component: _import_('boilpoint/component/Dynamic')
+        }
+      ]
     },
     {
       path: '/brochure',

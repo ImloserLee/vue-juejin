@@ -12,7 +12,7 @@
         <span class="r" @click="handleCloseRecomment"><svg-icon iconClass="close" class="icon-close"></svg-icon></span>
       </div>
     </div>
-    <div class="item" v-for="item in recomment" :key=item.objectId>
+    <div class="item" v-for="item in recomment" :key=item.objectId @click="handleToDetail(item)">
       <div class="item_left">
         <p class="txt">{{item.title}}</p>
         <div class="slogan">
@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import { getUrlParam } from 'utils/utils'
 export default {
   name: 'Hot',
   props: {
@@ -57,6 +58,19 @@ export default {
     },
     handleRefreshRecomment() {
       this.$emit('refreshRecomment')
+    },
+    // 详情页需要的参数根据type值不同进行区分
+    // type = 1 传postId type = 2 传递objectId
+    handleToDetail(item) {
+      let postId = getUrlParam(item.originalUrl)
+      let objectId = item.objectId
+      let type = item.type === 'post' ? 1 : 2
+      let id = type === 1 ? postId : objectId
+      let params = {
+        id: id,
+        type: type
+      }
+      this.$emit('toDetail', params)
     }
   },
   filters: {

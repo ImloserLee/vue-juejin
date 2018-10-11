@@ -1,8 +1,8 @@
 <template>
   <ul>
     <li v-for="item in timeline" :key="item.objectId" class="list">
-      <div class="panel" @click="handleToDetail(item)">
-        <div class="header">
+      <div class="panel">
+        <div class="header" @click="handleToDetail(item)">
           <div class="header_left">
             <div class="avatar">
               <img :src="item.user.avatarLarge" />
@@ -15,7 +15,7 @@
             <span>{{item.tags | splitTag}}</span>
           </div>
         </div>
-        <div class="content">
+        <div class="content" @click="handleToDetail(item)">
           <div class="content_left">
             <h4>{{item.title}}</h4>
             <div class="text">
@@ -23,17 +23,18 @@
             </div>
           </div>
           <div class="content_right" v-if="item.screenshot">
-            <img :src="item.screenshot" alt="">
+            <img :src="item.screenshot">
           </div>
         </div>
         <div class="bar">
           <div class="live">
-            <span class="icon"><svg-icon iconClass="like"></svg-icon></span>
-            <span class="text">20</span>
+            <span class="icon"><svg-icon iconClass="love2"></svg-icon></span>
+            <span class="text">{{item.collectionCount}}</span>
           </div>
           <div class="comment">
             <span class="icon"><svg-icon iconClass="comment"></svg-icon></span>
-            <span class="text">评论</span>
+            <span class="text" v-if="item.commentsCount">{{item.commentsCount}}</span>
+            <span class="text" v-else>评论</span>
           </div>
         </div>
       </div>
@@ -42,6 +43,7 @@
 </template>
 
 <script>
+import { getUrlParam } from 'utils/utils'
 export default {
   props: {
     timeline: {
@@ -64,29 +66,15 @@ export default {
     // 详情页需要的参数根据type值不同进行区分
     // type = 1 传postId type = 2 传递objectId
     handleToDetail(item) {
-      let postId = this.handleGetUrlParam(item.originalUrl)
+      let postId = getUrlParam(item.originalUrl)
       let objectId = item.objectId
-      let type = item.type
-      let id = type === 'post' ? postId : objectId
+      let type = item.type === 'post' ? 1 : 2
+      let id = type === 1 ? postId : objectId
       let params = {
         id: id,
         type: type
       }
       this.$emit('toDetail', params)
-    },
-    /**
-     * 获取url中参数POSTID的值
-     * @params url {string} 请求地址
-     */
-    handleGetUrlParam(url) {
-      let urlArr = url.split('//')
-      let start = urlArr[1].indexOf('/') + 1
-      let relUrl = urlArr[1].substring(start)
-      if (relUrl.indexOf('?') !== -1) {
-        relUrl = relUrl.split('?')[0]
-      }
-      let postId = relUrl.split('/').slice(-1)[0]
-      return postId
     }
   }
 }
@@ -144,6 +132,7 @@ export default {
       }
       &_right {
         flex:1;
+        height: 160px;
         img {
           width:100%;
           height: 100%;

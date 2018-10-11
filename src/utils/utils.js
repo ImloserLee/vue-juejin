@@ -16,3 +16,18 @@ export function getRect(el) {
     }
   }
 }
+
+/**
+ * 获取url中参数POSTID的值
+ * @params url {string} 请求地址
+ */
+export function getUrlParam(url) {
+  let urlArr = url.split('//')
+  let start = urlArr[1].indexOf('/') + 1
+  let relUrl = urlArr[1].substring(start)
+  if (relUrl.indexOf('?') !== -1) {
+    relUrl = relUrl.split('?')[0]
+  }
+  let postId = relUrl.split('/').slice(-1)[0]
+  return postId
+}

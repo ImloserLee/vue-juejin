@@ -26,6 +26,7 @@
           :rotate="rotate"
           @closeRecomment="handleColseRecomment"
           @refreshRecomment="handleRefreshRecomment"
+          @toDetail="handleToDetail"
         >
           <span slot="text" class="txt">热门推荐</span>
         </hot-recomment>
@@ -67,16 +68,23 @@ export default {
   },
   mounted() {
     this.getEntryByHotRecomment()
-    this.getEntryByTimeline(true)
+    if (this.auth) {
+      this.getEntryByTimeline(true)
+    } else {
+      this.getEntryByRank(true)
+    }
   },
   methods: {
     // 获取热门信息
     async getEntryByHotRecomment() {
+      let { token = '', uid = '', device_id = '' } = this.auth ? this.auth : ''
       let data = {
         params: {
-          src: 'web',
-          limit: LIMIT,
-          ...this.auth
+          src: 'ios',
+          limit: 3,
+          token: token,
+          device_id: device_id,
+          uid: uid,
         }
       }
       let res = await API.getEntryByHotRecomment(data)
@@ -98,7 +106,7 @@ export default {
       entryIds = entryIds.join('|')
       let data = {
         params: {
-          src: 'web',
+          src: 'ios',
           entryId: entryIds,
           ...this.auth
         }
@@ -109,9 +117,11 @@ export default {
       }
     }, 
 
-    // 获取首页内容
+    // 获取首页内容 用户登录状态下请求接口
     async getEntryByTimeline(reload) {
+      let { token = '', uid = 'unlogin', device_id = '' } = this.auth ? this.auth : ''
       let timeline = this.timelineData
+      // 下拉刷新或者刚进入页面, before的值为空
       if (!timeline.length || reload) {
         timeline = [{ verifyCreatedAt: '' }]
       }
@@ -121,15 +131,44 @@ export default {
           src: 'ios',
           limit: LIMIT,
           before: rankIndex,
-          ...this.auth
+          token: token,
+          device_id: device_id,
+          uid: uid,
         }
       }
       let res = await API.getEntryByTimeline(data)
-      if (res.m === 'ok') {
+      if (res.s === 1) {
         let entrylist = res.d.entrylist ? res.d.entrylist : []
         this.timelineData = reload ? entrylist : this.timelineData.concat(entrylist.slice(1))
       }
     },
+
+    // 获取首页内容 用户未登录状态下请求接口
+    async getEntryByRank(reload) {
+      let { token = '', uid = 'unlogin', device_id = '' } = this.auth ? this.auth : ''
+      let timeline = this.timelineData
+      // 根据抓包接口,下拉刷新和刚进入页面时before参数对应的值为空
+      if (!timeline.length || reload) {
+        timeline = [{ rankIndex: '' }]
+      }
+      let rankIndex = (timeline.slice(-1)[0].rankIndex) || ''
+      let data = {
+        params: {
+          src: 'ios',
+          limit: LIMIT,
+          uid: uid,
+          device_id: device_id,
+          token: token,
+          before: rankIndex
+        }
+      }
+      let res = await API.getEntryByRank(data)
+      if (res.s === 1) {
+        let entrylist = res.d && res.d.entrylist || []
+        this.timelineData = reload ? entrylist : this.timelineData.concat(entrylist.slice(1))
+      }
+    },
+
     // 前往登陆页面
     handleToLogin() {
       this.$router.push({ path: '/login'})
@@ -139,13 +178,20 @@ export default {
     },
     
     handlePullDown() {
-      this.getEntryByTimeline(true)
+      if (this.auth) {
+        this.getEntryByTimeline(true)
+      } else {
+        this.getEntryByRank(true)
+      }
     },
     handlePullUp() {
-      this.getEntryByTimeline()
+      if (this.auth) {
+        this.getEntryByTimeline()
+      } else {
+        this.getEntryByRank()
+      }
     },
     handleToDetail(params) {
-      console.log(params)
       this.$router.push({ path: '/detail', query: { id: params.id, type: params.type } })
     },
     rebuildScroll() {

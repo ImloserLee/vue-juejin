@@ -104,6 +104,7 @@ export default {
       height: 100px;
       background-color: @bg-color;
       border-top: 1px solid #c7c5c5;
+      z-index: 99;
       .item {
         flex: 1;
         .flex(@flex-direction: column);
@@ -122,12 +123,11 @@ export default {
       }
     }
   }
-  .slide-left-enter, .slide-right-leave-active {
+  .animate-enter-active, .animate-leave-active {
+    transition: all .5s;
+  }
+  .animate-enter, .animate-leave-to {
     opacity: 0;
     transform: translateX(100%);
-  }
-  .slide-left-leave-active, .slide-right-enter {
-    opacity: 0;
-    transform: translateX(-100%);
   }
 </style>

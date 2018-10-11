@@ -21,6 +21,7 @@
           :hasRight=hasRightIcon
           iconName='hot-red'
           class="hot_recomment"
+          @toDetail="handleToDetail"
         >
           <span slot="text" class="hot">热门文章</span>
         </hot-recomment>
@@ -31,7 +32,7 @@
 
 <script>
 import Vue from 'vue'
-import SearchSwiper from './component/Swiper'
+import SearchSwiper from 'components/Swiper'
 import HotRecomment from 'components/HotRecomment'
 import Scroll from 'components/Scroll'
 import API from 'api/api'
@@ -77,6 +78,9 @@ export default {
       }
     },
     async getEntryByRank(reload) {
+      let token = this.auth ? this.auth.token : ''
+      let device_id = this.auth ? this.auth.device_id : ''
+      let uid = this.auth ? this.auth.uid : 'unlogin'
       let rankList = this.rankList
       // 根据抓包接口,下拉刷新和刚进入页面时before参数对应的值为空
       if (!rankList.length || reload) {
@@ -87,9 +91,9 @@ export default {
         params: {
           src: 'ios',
           limit: 20,
-          uid: this.auth.uid || 'unlogin',
-          device_id: this.auth.device_id,
-          token: this.auth.token || '',
+          uid: uid,
+          device_id: device_id,
+          token: token,
           before: rankIndex
         }
       }
@@ -98,6 +102,9 @@ export default {
         let entrylist = res.d && res.d.entrylist || []
         this.rankList = reload ? entrylist : this.rankList.concat(entrylist.slice(1))
       }
+    },
+    handleToDetail(params) {
+      this.$router.push({ path: '/detail', query: { id: params.id, type: params.type } })
     },
     handlePullUp() {
       this.getEntryByRank()

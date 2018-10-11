@@ -53,6 +53,20 @@ module.exports = {
           '/storage': '/'
         }
       },
+      '/entryview': {
+        target: 'https://entry-view-storage-api-ms.juejin.im/v1',
+        changeOrigin: true,
+        pathRewrite: {
+          '/entryview': '/'
+        }
+      },
+      '/short': {
+        target: 'https://short-msg-ms.juejin.im/v1',
+        changeOrigin: true,
+        pathRewrite: {
+          '/short': '/'
+        }
+      },
     },
 
     // Various Dev Server settings

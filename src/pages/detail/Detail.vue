@@ -1,20 +1,27 @@
 <template>
-  <div class="detail">
-    <header class="header">
-        <div class="left">
-          <div class="icon"><svg-icon iconClass="return"></svg-icon></div>
-          <div class="info">
-            <span class="avatar"><img src="./../../assets/images/avatar.png" alt=""></span>
-            <span class="name">酸痛与感触</span>
+  <transition name="animate">
+    <div class="detail">
+      <header class="header">
+          <div class="left">
+            <div class="icon" @click="handleGoBack"><svg-icon iconClass="return"></svg-icon></div>
+            <div class="info">
+              <span class="avatar">
+                <img :src="userInfo.avatarLarge">
+              </span>
+              <span class="name">{{userInfo.username}}</span>
+            </div>
           </div>
-        </div>
-        <div class="right">
-          <span class="icon"><svg-icon iconClass="fenxiang"></svg-icon></span>
-        </div>
-    </header>
-    <div v-html="content" class="content"></div>
-    <footer class="footer">这是底部</footer>
-  </div>
+          <div class="right">
+            <span class="icon"><svg-icon iconClass="fenxiang"></svg-icon></span>
+          </div>
+      </header>
+      <div v-html="content" class="content"></div>
+      <footer class="footer">
+        <span><svg-icon iconClass="like"></svg-icon></span>
+        <span><svg-icon iconClass="pinlun"></svg-icon></span>
+      </footer>
+    </div>
+  </transition>
 </template>
 
 <script>
@@ -24,29 +31,42 @@ export default {
   name: 'Detail',
   data() {
     return {
-      content: null,
+      content: '',
+      userInfo: '',
       scrollbar: true,
       scrollbarFade: true,
     }
   },
   mounted() {
-    this.getDetailData()
+    this.getDetailData(1)
+    this.getDetailData(2)
   },
   methods: {
-    async getDetailData() {
+    async getDetailData(typeNum) {
       let { id, type } = this.$route.query
+      let { token = '', uid = '', device_id = '' } = this.auth ? this.auth : ''
       let data = {
         params: {
-           ...this.auth,
-          src: 'ios',
-          type: type === 'post' ? 'entryView' : 'entry',
+          uid: uid,
+          device_id: device_id,
+          token: token,
+          src: 'web',
+          type: typeNum === 1 ? 'entryView' : 'entry',
           postId: id
         }
       }
       let res = await API.getDetailData(data)
       if (res.s === 1) {
-        this.content = res.d.content
+        if (typeNum === 1) {
+          this.content = res.d.content
+        } else {
+          this.userInfo = res.d.user
+        }
+        
       }
+    },
+    handleGoBack() {
+      this.$router.go(-1)
     }
   },
   computed: {
@@ -80,7 +100,10 @@ export default {
         .flex();
         .icon {
           flex: 1;
-          font-size: 48px;
+          font-size: 56px;
+          .svg-icon {
+            margin-left: -10px;
+          }
         }
         .info {
           flex: 3;
@@ -107,7 +130,7 @@ export default {
         flex: 1;
         .flex(@justify-content: flex-end);
         .icon {
-          font-size: 56px;
+          font-size: 64px;
         }
       }
     }
@@ -119,14 +142,23 @@ export default {
       font-size: 36px;
       background-color: #fff;
       overflow-y: scroll;
+      /deep/ img {
+        width: 100%;
+      }
     }
     .footer {
+      .flex(@justify-content: flex-start);
       position: fixed;
       left: 0;
       bottom: 0;
       right: 0;
+      padding: 0 40px;
       background-color: @bg-color;
       height: 100px;
+      font-size: 64px;
+      span {
+        margin-right: 15px;
+      }
     }
   }
 </style>
