@@ -66,6 +66,11 @@ export default {
     VHeader,
     ItemPane,
   },
+  activated() {
+    this.$nextTick(() => {
+      this.$refs.scroll.refresh()
+    })
+  },
   mounted() {
     this.getEntryByHotRecomment()
     if (this.auth) {
@@ -171,7 +176,8 @@ export default {
 
     // 前往登陆页面
     handleToLogin() {
-      this.$router.push({ path: '/login'})
+      let path = this.$route.path
+      this.$router.push({ path: '/login' , query: { url: path } })
     },
     handleColseRecomment() {
       this.showHotRecomment = false

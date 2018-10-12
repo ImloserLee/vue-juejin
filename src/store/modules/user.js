@@ -2,7 +2,7 @@ import { Local } from 'utils/storage'
 import API from 'api/api'
 const user = {
   state: {
-    isLogin: Local.get('auth') ? true : false,
+    isLogin: false,
     auth: Local.get('auth')
   },
   actions: {
@@ -21,6 +21,8 @@ const user = {
         current_uid: res.userId
       }
       Local.set('auth', auth)
+      Local.set('isLogin', true)
+      state.isLogin = true
     }
   }
 }

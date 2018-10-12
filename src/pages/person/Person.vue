@@ -1,7 +1,7 @@
 <template>
   <div class="person">
     <header class="header">我</header>
-    <scroll class="scroll">
+    <scroll class="scroll" ref="scroll">
       <section class="section">
         <div class="information">
           <div class="left">
@@ -98,7 +98,12 @@ export default {
   components: {
     Scroll
   },
-  created() {
+  activated() {
+    this.$nextTick(() => {
+      this.$refs.scroll.refresh()
+    })
+  },
+  mounted() {
     this.getUserInfo()
   },
   methods: {

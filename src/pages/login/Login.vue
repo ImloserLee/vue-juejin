@@ -57,11 +57,13 @@ export default {
           password: this.password
         }
       }
-      this.$store.dispatch('login', data)
-      this.hanldeGoBack()
+      this.$store.dispatch('login', data).then(() => {
+        this.hanldeGoBack()
+      })
     },
     hanldeGoBack() {
-      this.$router.go(-1)
+      let { url } = this.$route.query;
+      this.$router.push(url)
     }
   }
 }

@@ -12,7 +12,9 @@
       </router-link>
       <i class="bar" :style="{left: barPos}"></i>
     </header>
-    <router-view></router-view>
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
   </div>
 </template>
 

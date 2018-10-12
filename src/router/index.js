@@ -60,9 +60,6 @@ export const router = new Router({
     {
       path: '/login',
       name: 'Login',
-      meta: {
-        slide: 1
-      },
       component: _import_('login/Login')
     },
     {

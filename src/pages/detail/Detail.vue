@@ -12,7 +12,7 @@
             </div>
           </div>
           <div class="right">
-            <span class="icon"><svg-icon iconClass="fenxiang"></svg-icon></span>
+            <span class="icon"><svg-icon iconClass="shenluehao"></svg-icon></span>
           </div>
       </header>
       <div v-html="content" class="content"></div>
