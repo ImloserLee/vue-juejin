@@ -23,7 +23,7 @@
         <li class="panel" v-for="item in pinList" :key="item.objectId">
             <div class="top">
               <div class="l">
-                <img :src="item.user.avatarLarge" >
+                <img v-lazy="item.user.avatarLarge" >
               </div>
               <div class="m">
                 <p class="title">{{item.user.username}}</p>
@@ -43,7 +43,7 @@
             </div>
             <div class="content">
               <p class="content_txt">{{item.content}}</p>
-              <div class="content_img"><img :src="(item.pictures)[0]" ></div>
+              <div class="content_img"><img v-lazy="(item.pictures)[0]" ></div>
             </div>
             <div class="action_bar">
               <div class="action_bar_item">
@@ -186,7 +186,7 @@ export default {
       }
       .panel {
         margin-top: 20px;
-        padding: 20px 0;
+        padding-top: 20px;
         background-color: #fff;
         .top {
           .flex();

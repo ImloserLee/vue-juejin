@@ -5,7 +5,7 @@
         <div class="header" @click="handleToDetail(item)">
           <div class="header_left">
             <div class="avatar">
-              <img :src="item.user.avatarLarge" />
+              <img v-lazy="item.user.avatarLarge" />
             </div>
             <div class="name">
               {{item.user.username}}
@@ -23,7 +23,7 @@
             </div>
           </div>
           <div class="content_right" v-if="item.screenshot">
-            <img :src="item.screenshot">
+            <img v-lazy="item.screenshot">
           </div>
         </div>
         <div class="bar">

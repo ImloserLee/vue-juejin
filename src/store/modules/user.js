@@ -22,6 +22,7 @@ const user = {
       }
       Local.set('auth', auth)
       Local.set('isLogin', true)
+      state.auth = auth
       state.isLogin = true
     }
   }

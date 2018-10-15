@@ -16,7 +16,7 @@
           <ul>
             <li class="list" v-for="fitem in followedTopicList" :key="fitem.objectId">
               <div class="l">
-                <img :src="fitem.icon">
+                <img v-lazy="fitem.icon">
               </div>
               <div class="m">
                 <p class="title">{{fitem.title}}</p>
@@ -33,7 +33,7 @@
           <ul>
             <li class="list" v-for="item in unFollowedTopicList" :key="item.objectId">
               <div class="l">
-                <img :src="item.icon">
+                <img v-lazy="item.icon">
               </div>
               <div class="m">
                 <p class="title">{{item.title}}</p>

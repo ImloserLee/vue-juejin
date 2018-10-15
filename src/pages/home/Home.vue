@@ -241,6 +241,16 @@ export default {
         this.rebuildScroll()
       },
       deep: true
+    },
+    $route(to, from) {
+      if (from.path === '/login') {
+        this.getEntryByHotRecomment()
+        if (this.auth) {
+          this.getEntryByTimeline(true)
+        } else {
+          this.getEntryByRank(true)
+        }
+      }
     }
   }
 }

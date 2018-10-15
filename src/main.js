@@ -7,6 +7,7 @@ import store from './store'
 import SvgIcon from './components/SvgIcon'
 
 import VueAwesomeSwiper from 'vue-awesome-swiper'
+import VueLazyload from 'vue-lazyload'
 
 import './style/phone-reset.css'
 import './icons'
@@ -16,6 +17,7 @@ import 'swiper/dist/css/swiper.css'
 Vue.component('svg-icon', SvgIcon)
 Vue.config.productionTip = false
 Vue.use(VueAwesomeSwiper)
+Vue.use(VueLazyload)
 
 /* eslint-disable no-new */
 new Vue({

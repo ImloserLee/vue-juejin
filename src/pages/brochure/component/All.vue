@@ -11,7 +11,7 @@
     <div class="all">
       <div class="card" v-for="item in brochureList" :key="item._id">
         <div class="left">
-          <img :src="item.img" alt="">
+          <img v-lazy="item.img" alt="">
         </div>
         <div class="mid">
           <div class="title">{{item.title}}</div>

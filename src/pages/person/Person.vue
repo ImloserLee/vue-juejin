@@ -6,7 +6,7 @@
         <div class="information">
           <div class="left">
             <div class="avatar">
-              <img :src="personData.avatarLarge" alt="" v-if="auth">
+              <img v-lazy="personData.avatarLarge" alt="" v-if="auth">
               <img src="./../../assets/images/avatar.png" alt="" v-else>
             </div>
             <div class="info" v-if="auth">

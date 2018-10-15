@@ -6,7 +6,7 @@
             <div class="icon" @click="handleGoBack"><svg-icon iconClass="return"></svg-icon></div>
             <div class="info">
               <span class="avatar">
-                <img :src="userInfo.avatarLarge">
+                <img v-lazy="userInfo.avatarLarge">
               </span>
               <span class="name">{{userInfo.username}}</span>
             </div>

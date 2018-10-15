@@ -58,6 +58,11 @@ export const router = new Router({
       component: _import_('person/Person')
     },
     {
+      path: '/homepage',
+      name: 'HomePage',
+      component: _import_('homepage/HomePage')
+    },
+    {
       path: '/login',
       name: 'Login',
       component: _import_('login/Login')

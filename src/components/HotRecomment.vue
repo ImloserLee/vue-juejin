@@ -22,7 +22,7 @@
         </div>
       </div>
       <div class="item_right" v-if="item.screenshot">
-        <img :src="item.screenshot" />
+        <img v-lazy="item.screenshot" />
       </div>
     </div>
   </section>
