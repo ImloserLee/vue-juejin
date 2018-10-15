@@ -10,18 +10,12 @@
       @pullingDown="handlePullDown"
       @pullingUp="handlePullUp">
       <ul>
-        <li class="list" v-for="item in dynamicPinList" :key="item.follow.objectId">
-          <div class="avatar">
-            <img v-lazy="item.follow.follower.avatarLarge" >
-          </div>
-          <div class="txt">
-            <div class="txt_t">
-              <span class="f_large">{{item.follow.follower.username}}</span>
-              <span class="c_gary">关注了</span>
-              <span class="f_small">{{item.follow.followee.username}}</span>
-            </div>
-            <div class="txt_b">{{item.follow.createdAt | timeBefore}}</div>
-          </div>
+        <li class="dynamic-list" 
+            v-for="danamic in dynamicPinList" 
+            :key="danamic.type === 'follow' ? danamic.follow.objectId : danamic.pin.objectId"
+        >
+          <dynamic-item :dynamicItemData="danamic" v-if="danamic.type === 'follow'"></dynamic-item>
+          <recomment-item :item="danamic.pin" v-else></recomment-item>
         </li>
       </ul>
     </scroll>
@@ -30,13 +24,18 @@
 
 <script>
 import Scroll from 'components/Scroll'
+import DynamicItem from './DynamicItem'
+import RecommentItem from './RecommentItem'
+
 import { mapGetters } from 'vuex'
 import { scrollMixin } from 'utils/mixin'
 import API from 'api/api'
 export default {
   name: 'Dynamic',
   components: {
-    Scroll
+    Scroll,
+    DynamicItem,
+    RecommentItem
   },
   mixins: [scrollMixin],
   data() {
@@ -68,10 +67,6 @@ export default {
       let res = await API.getDynamicPinList(data)
       if (res.s === 1) {
         let list = res.d && res.d.list || []
-        // 这里简化了列表的渲染,只展示了关注这一块
-        list = list.filter((item) => {
-          return item.type === 'follow'
-        })
         this.dynamicPinList = reload ? list : this.dynamicPinList.concat(list.slice(1))
       }
     },
@@ -96,38 +91,10 @@ export default {
     .scroll {
       height: e("calc(100vh - 200px)");
     }
-    .list {
-      .flex(@justify-content: flex-start);
+    .dynamic-list {
       margin-top: 20px;
       padding: 20px;
       background: #fff;
-      .avatar {
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-        overflow: hidden;
-        img {
-          width: 100%;
-        }
-      }
-      .txt {
-        margin-left: 20px;
-        height: 100px;
-        font-size: 36px;
-        &_t {
-          margin-bottom: 15px;
-          .c_gary {
-            color: @font-color;
-          }
-          .f_small {
-            font-size: 32px;
-          }
-        }
-        &_b {
-          font-size: 32px;
-          color: @font-color;
-        }
-      }
     }
   }
 </style>

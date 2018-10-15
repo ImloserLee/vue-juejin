@@ -80,13 +80,7 @@ export default {
 <style lang="less" scoped>
   @import '~style/mixin.less';
   .detail {
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    z-index: 10001;
-    background-color: #fff;
+    .fixed(@background-color: #fff);
     .header {
       position: relative;
       padding: 0 40px;
