@@ -33,6 +33,7 @@
         <item-pane :timeline="timelineData" @toDetail="handleToDetail"></item-pane>
       </div>
     </scroll>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -43,7 +44,7 @@ import VHeader from './component/Header'
 import ItemPane from './component/ItemPanel'
 import HotRecomment from 'components/HotRecomment'
 import { mapGetters } from 'vuex'
-import { ScrollConfig } from 'utils/scrollConfig'
+import { scrollMixin } from 'utils/mixin'
 import API from 'api/api'
 const LIMIT = 20
 export default {
@@ -54,12 +55,9 @@ export default {
       timelineData: [],
       showHotRecomment: true,
       rotate: false,
-      scrollbar: true,
-      scrollbarFade: true,
-      pullDownRefresh: true,
-      pullUpLoad: true
     }
   },
+  mixins: [scrollMixin],
   components: {
     HotRecomment,
     Scroll,
@@ -198,50 +196,16 @@ export default {
       }
     },
     handleToDetail(params) {
-      this.$router.push({ path: '/detail', query: { id: params.id, type: params.type } })
-    },
-    rebuildScroll() {
-      Vue.nextTick(() => {
-        this.$refs.scroll.destroy()
-        this.$refs.scroll.initScroll()
-      })
+      this.$router.push({ path: 'home/detail', query: { id: params.id, type: params.type } })
     }
   },
   computed: {
-    scrollbarObj: function () {
-      return this.scrollbar ? {fade: this.scrollbarFade} : false
-    },
-    pullDownRefreshObj: function () {
-      return this.pullDownRefresh ? {
-        threshold: parseInt(ScrollConfig.pullDownRefreshThreshold),
-        stop: parseInt(ScrollConfig.pullDownRefreshStop),
-        txt: ScrollConfig.pullDownRefreshTxt
-      } : false
-    },
-    pullUpLoadObj: function () {
-      return this.pullUpLoad ? {
-        threshold: parseInt(ScrollConfig.pullUpLoadThreshold),
-        txt: {more: ScrollConfig.pullUpLoadMoreTxt, noMore: ScrollConfig.pullUpLoadNoMoreTxt}
-      } : false
-    },
     ...mapGetters([
       'isLogin',
       'auth'
     ])
   },
   watch: {
-    scrollbarObj: {
-      handler() {
-        this.rebuildScroll()
-      },
-      deep: true
-    },
-    pullUpLoadObj: {
-      handler() {
-        this.rebuildScroll()
-      },
-      deep: true
-    },
     $route(to, from) {
       if (from.path === '/login') {
         this.getEntryByHotRecomment()

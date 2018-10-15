@@ -2,8 +2,8 @@ import { Local } from 'utils/storage'
 import API from 'api/api'
 const user = {
   state: {
-    isLogin: false,
-    auth: Local.get('auth')
+    isLogin: Local.get('isLogin') || false,
+    auth: Local.get('auth') || null
   },
   actions: {
     async login({commit}, params) {

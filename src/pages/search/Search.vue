@@ -27,6 +27,7 @@
         </hot-recomment>
       </div>
     </scroll>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -37,7 +38,7 @@ import HotRecomment from 'components/HotRecomment'
 import Scroll from 'components/Scroll'
 import API from 'api/api'
 import { mapGetters } from 'vuex'
-import { ScrollConfig } from 'utils/scrollConfig'
+import { scrollMixin } from 'utils/mixin'
 export default {
   name: 'Search',
   components: {
@@ -49,13 +50,10 @@ export default {
     return {
       bannerList: [],
       hasRightIcon: false,
-      rankList: [],
-      scrollbar: true,
-      scrollbarFade: true,
-      pullDownRefresh: true,
-      pullUpLoad: true
+      rankList: []
     }
   },
+  mixins: [scrollMixin],
   mounted() {
     this.getBannerImgList()
     this.getEntryByRank(true)
@@ -104,7 +102,7 @@ export default {
       }
     },
     handleToDetail(params) {
-      this.$router.push({ path: '/detail', query: { id: params.id, type: params.type } })
+      this.$router.push({ path: 'search/detail', query: { id: params.id, type: params.type } })
     },
     handlePullUp() {
       this.getEntryByRank()
@@ -112,47 +110,11 @@ export default {
     handlePullDown() {
       this.getEntryByRank(true)
     },
-    rebuildScroll() {
-      Vue.nextTick(() => {
-        this.$refs.scroll.destroy()
-        this.$refs.scroll.initScroll()
-      })
-    }
   },
   computed: {
-    scrollbarObj: function () {
-      return this.scrollbar ? {fade: this.scrollbarFade} : false
-    },
-    pullDownRefreshObj: function () {
-      return this.pullDownRefresh ? {
-        threshold: parseInt(ScrollConfig.pullDownRefreshThreshold),
-        stop: parseInt(ScrollConfig.pullDownRefreshStop),
-        txt: ScrollConfig.pullDownRefreshTxt
-      } : false
-    },
-    pullUpLoadObj: function () {
-      return this.pullUpLoad ? {
-        threshold: parseInt(ScrollConfig.pullUpLoadThreshold),
-        txt: {more: ScrollConfig.pullUpLoadMoreTxt, noMore: ScrollConfig.pullUpLoadNoMoreTxt}
-      } : false
-    },
     ...mapGetters([
       'auth'
     ])
-  },
-  watch: {
-    scrollbarObj: {
-      handler() {
-        this.rebuildScroll()
-      },
-      deep: true
-    },
-    pullUpLoadObj: {
-      handler() {
-        this.rebuildScroll()
-      },
-      deep: true
-    }
   }
 }
 </script>

@@ -62,8 +62,12 @@ export default {
       })
     },
     hanldeGoBack() {
-      let { url } = this.$route.query;
-      this.$router.push(url)
+      if (this.$route.query && this.$route.query.url) {
+        let { url } = this.$route.query
+        this.$router.push(url)
+      } else {
+        this.$router.push('/person')
+      }
     }
   }
 }
@@ -72,13 +76,7 @@ export default {
 <style lang="less" scoped>
   @import '~style/mixin.less';
   .login {
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    z-index: 999;
-    background-color: #fff;
+    .fixed(@background-color: #fff);
     .logo {
       margin: 80px auto;
       width: 130px;

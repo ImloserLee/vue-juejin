@@ -5,6 +5,7 @@ import App from './App'
 import router from './router/permission'
 import store from './store'
 import SvgIcon from './components/SvgIcon'
+import './utils/filter'
 
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 import VueLazyload from 'vue-lazyload'

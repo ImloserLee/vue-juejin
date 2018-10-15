@@ -3,7 +3,7 @@
     <header class="header">我</header>
     <scroll class="scroll" ref="scroll">
       <section class="section">
-        <div class="information">
+        <div class="information" @click="handleToLogin">
           <div class="left">
             <div class="avatar">
               <img v-lazy="personData.avatarLarge" alt="" v-if="auth">
@@ -14,7 +14,7 @@
               <p class="job">{{personData.jobTitle}}</p>
             </div>
             <div class="info" v-else>
-              <p class="text" @click="handleToLogin">登陆/注册</p>
+              <p class="text">登陆/注册</p>
             </div>
           </div>
           <div class="right">
@@ -73,7 +73,7 @@
               <span class="item icon"><svg-icon iconClass="feedback"></svg-icon></span>
               <span class="item">意见反馈</span>
             </li>
-            <li class="list">
+            <li class="list" @click="handleToDetailPage('setting')">
               <span class="item icon"><svg-icon iconClass="setting"></svg-icon></span>
               <span class="item">设置</span>
             </li>
@@ -98,11 +98,9 @@ export default {
   components: {
     Scroll
   },
-  activated() {
-    this.$nextTick(() => {
-      this.$refs.scroll.refresh()
-    })
-  },
+  /* activated() {
+    this.getUserInfo()
+  }, */
   mounted() {
     this.getUserInfo()
   },
@@ -110,7 +108,7 @@ export default {
     async getUserInfo() {
       let data = {
         params: {
-          src: 'web',
+          src: 'ios',
           ...this.auth
         }
       }
@@ -120,13 +118,23 @@ export default {
       }
     },
     handleToLogin() {
-      this.$router.push({path: '/login'})
+      this.$router.push({path: '/homepage'})
+    },
+    handleToDetailPage(type) {
+      this.$router.push({path: `/${type}`})
     }
   },
   computed: {
     ...mapGetters([
       'auth'
     ])
+  },
+  watch: {
+    $route(to, from) {
+      if (from.path === '/login') {
+        this.getUserInfo()
+      }
+    }
   }
 }
 </script>

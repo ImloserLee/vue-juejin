@@ -6,7 +6,7 @@ router.beforeEach((to, from, next) => {
     if (store.state.user.isLogin) {
       next()
     } else {
-      next('/')
+      next('/login')
     }
   } else {
     next()

@@ -3,19 +3,24 @@
     <scroll 
       ref="scroll"
       class="scroll"
-      :scrollbar="scrollbarObj">
+      :data="dynamicPinList"
+      :scrollbar="scrollbarObj"
+      :pullDownRefresh="pullDownRefreshObj"
+      :pullUpLoad="pullUpLoadObj"
+      @pullingDown="handlePullDown"
+      @pullingUp="handlePullUp">
       <ul>
-        <li class="list">
+        <li class="list" v-for="item in dynamicPinList" :key="item.follow.objectId">
           <div class="avatar">
-            <img src="../../../assets/images/avatar.png" >
+            <img v-lazy="item.follow.follower.avatarLarge" >
           </div>
           <div class="txt">
             <div class="txt_t">
-              <span class="f_large">杨明</span>
+              <span class="f_large">{{item.follow.follower.username}}</span>
               <span class="c_gary">关注了</span>
-              <span class="f_small">策士</span>
+              <span class="f_small">{{item.follow.followee.username}}</span>
             </div>
-            <div class="txt_b">11小时前</div>
+            <div class="txt_b">{{item.follow.createdAt | timeBefore}}</div>
           </div>
         </li>
       </ul>
@@ -25,21 +30,62 @@
 
 <script>
 import Scroll from 'components/Scroll'
+import { mapGetters } from 'vuex'
+import { scrollMixin } from 'utils/mixin'
+import API from 'api/api'
 export default {
   name: 'Dynamic',
   components: {
     Scroll
   },
+  mixins: [scrollMixin],
   data() {
     return {
-      scrollbar: true,
-      scrollbarFade: true,
+      dynamicPinList: []
+    }
+  },
+  mounted() {
+    this.getDynamicPinList(true)
+  },
+  methods: {
+    async getDynamicPinList(reload) {
+      let { token = '', uid = 'unlogin', device_id = '' } = this.auth ? this.auth : ''
+      let dynamicPinList = this.dynamicPinList
+      if (!dynamicPinList.length || reload) {
+        dynamicPinList = [{ createdAt: '' }]
+      }
+      let createdAt = (dynamicPinList.slice(-1)[0].createdAt) || ''
+      let data = {
+        params: {
+          src: 'ios',
+          token: token,
+          uid: uid,
+          device_id: device_id,
+          before: createdAt,
+          limit: 20
+        }
+      }
+      let res = await API.getDynamicPinList(data)
+      if (res.s === 1) {
+        let list = res.d && res.d.list || []
+        // 这里简化了列表的渲染,只展示了关注这一块
+        list = list.filter((item) => {
+          return item.type === 'follow'
+        })
+        this.dynamicPinList = reload ? list : this.dynamicPinList.concat(list.slice(1))
+      }
+    },
+    handlePullDown() {
+      this.getDynamicPinList(true)
+    },
+    handlePullUp() {
+      this.getDynamicPinList()
     }
   },
   computed: {
-    scrollbarObj: function () {
-      return this.scrollbar ? {fade: this.scrollbarFade} : false
-    },
+    ...mapGetters([
+      'auth'
+    ])
   }
 }
 </script>
@@ -48,7 +94,7 @@ export default {
   @import '~style/mixin.less';
   .dynamic {
     .scroll {
-      height: calc(100vh - 200px);
+      height: e("calc(100vh - 200px)");
     }
     .list {
       .flex(@justify-content: flex-start);

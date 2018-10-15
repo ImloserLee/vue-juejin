@@ -141,10 +141,22 @@ class API extends Server {
     }
   }
 
-  // 沸点页数据
+  // 沸点页推荐数据
   async getPinList(params = {}) {
     try {
       let result = await this.axios('get', `/short/pinList/recommend`, params)
+      if (result.status === 200) {
+        return result.data
+      }
+    } catch (err) {
+      throw err
+    }
+  }
+
+  // 沸点页动态栏数据
+  async getDynamicPinList(params = {}) {
+    try {
+      let result = await this.axios('get', `/short/pinList/dynamic`, params)
       if (result.status === 200) {
         return result.data
       }

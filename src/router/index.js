@@ -9,12 +9,24 @@ export const router = new Router({
     {
       path: '/home',
       name: 'Home',
-      component: _import_('home/Home')
+      component: _import_('home/Home'),
+      children: [
+        {
+          path: 'detail',
+          component: _import_('detail/Detail')
+        },
+      ]
     },
     {
       path: '/search',
       name: 'Search',
-      component: _import_('search/Search')
+      component: _import_('search/Search'),
+      children: [
+        {
+          path: 'detail',
+          component: _import_('detail/Detail')
+        },
+      ]
     },
     {
       path: '/boil',
@@ -60,17 +72,19 @@ export const router = new Router({
     {
       path: '/homepage',
       name: 'HomePage',
+      meta: { requireAuth: true },
       component: _import_('homepage/HomePage')
+    },
+    {
+      path: '/setting',
+      name: 'Setting',
+      meta: { requireAuth: true },
+      component: _import_('setting/Setting')
     },
     {
       path: '/login',
       name: 'Login',
       component: _import_('login/Login')
-    },
-    {
-      path: '/detail',
-      name: 'Detail',
-      component: _import_('detail/Detail')
     },
     {
       path: '/',

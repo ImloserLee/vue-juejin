@@ -30,7 +30,7 @@
                 <div class="desc">
                   <span v-if="item.user.jobTitle">{{item.user.jobTitle}} @</span>
                   <span v-if="item.user.company">{{item.user.company}} · </span>
-                  <span>1小时前</span>
+                  <span>{{item.createdAt | timeBefore}}</span>
                 </div>
               </div>
               <div class="r">
@@ -69,7 +69,7 @@ import Vue from 'vue'
 import Swiper from 'components/Swiper'
 import Scroll from 'components/Scroll'
 import { mapGetters } from 'vuex'
-import { ScrollConfig } from 'utils/scrollConfig'
+import { scrollMixin } from 'utils/mixin'
 import API from 'api/api'
 export default {
   name: 'Recomment',
@@ -90,12 +90,9 @@ export default {
       },
       recommentList: [],
       pinList: [],
-      scrollbar: true,
-      scrollbarFade: true,
-      pullDownRefresh: true,
-      pullUpLoad: true
     }
   },
+  mixins: [scrollMixin],
   mounted() {
     this.getHotRecommendList()
     this.getPinList(true)
@@ -145,30 +142,8 @@ export default {
     handlePullUp() {
       this.getPinList()
     },
-    rebuildScroll() {
-      Vue.nextTick(() => {
-        this.$refs.scroll.destroy()
-        this.$refs.scroll.initScroll()
-      })
-    }
   },
   computed: {
-    scrollbarObj: function () {
-      return this.scrollbar ? {fade: this.scrollbarFade} : false
-    },
-    pullDownRefreshObj: function () {
-      return this.pullDownRefresh ? {
-        threshold: parseInt(ScrollConfig.pullDownRefreshThreshold),
-        stop: parseInt(ScrollConfig.pullDownRefreshStop),
-        txt: ScrollConfig.pullDownRefreshTxt
-      } : false
-    },
-    pullUpLoadObj: function () {
-      return this.pullUpLoad ? {
-        threshold: parseInt(ScrollConfig.pullUpLoadThreshold),
-        txt: {more: ScrollConfig.pullUpLoadMoreTxt, noMore: ScrollConfig.pullUpLoadNoMoreTxt}
-      } : false
-    },
     ...mapGetters([
       'auth'
     ])
