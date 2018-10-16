@@ -20,9 +20,6 @@ export default {
     return {
       barPos: '17%'
     }
-  },
-  created() {
-    console.log(this.$route.path)
   }
 }
 </script>

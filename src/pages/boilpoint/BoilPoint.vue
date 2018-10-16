@@ -21,21 +21,26 @@
 <script>
 export default {
   name: 'Boil',
-  data() {
-    return {
-      barPos: '13%'
+  created() {
+    this.barPos = this.setBarPos(this.$route.path)
+  },
+  methods: {
+    setBarPos(path) {
+      let pos
+      if (path.indexOf('/topic') !== -1) {
+        pos = '13%'
+      } else if(path.indexOf('/recomment') !== -1) {
+        pos = '43%'
+      } else {
+        pos = '73%'
+      }
+      return pos
     }
   },
   watch: {
     $route: {
       handler: function(val, oldVal) {
-        if (val.path.indexOf('/topic') !== -1) {
-          this.barPos = '13%'
-        } else if(val.path.indexOf('/recomment') !== -1) {
-          this.barPos = '43%'
-        } else {
-          this.barPos = '73%'
-        }
+        this.barPos = this.setBarPos(val.path)
       }
     }
   }

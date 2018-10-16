@@ -3,12 +3,15 @@ import API from 'api/api'
 const user = {
   state: {
     isLogin: Local.get('isLogin') || false,
-    auth: Local.get('auth') || null
+    auth: Local.get('auth') || ''
   },
   actions: {
     async login({commit}, params) {
       let data = await API.login(params)
       commit('LOGIN', data)
+    },
+    signOut({commit}, params) {
+      commit('SIGN_OUT')
     }
   },
   mutations: {
@@ -20,10 +23,16 @@ const user = {
         uid: res.userId,
         current_uid: res.userId
       }
-      Local.set('auth', auth)
-      Local.set('isLogin', true)
       state.auth = auth
       state.isLogin = true
+      Local.set('auth', auth)
+      Local.set('isLogin', true)
+    },
+    SIGN_OUT(state) {
+      state.auth = ''
+      state.isLogin = false
+      Local.remove('auth')
+      Local.remove('isLogin')
     }
   }
 }

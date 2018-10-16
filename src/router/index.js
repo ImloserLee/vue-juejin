@@ -32,7 +32,7 @@ export const router = new Router({
       path: '/boil',
       name: 'Boil',
       component: _import_('boilpoint/BoilPoint'),
-      redirect: '/boil/topic',
+      redirect: '/boil/recomment',
       children: [
         {
           path: 'topic',

@@ -128,6 +128,6 @@ export default {
   }
   .animate-enter, .animate-leave-to {
     opacity: 0;
-    transform: translateX(100%);
+    transform: translate3d(100%, 0, 0);
   }
 </style>

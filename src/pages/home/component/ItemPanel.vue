@@ -27,12 +27,13 @@
           </div>
         </div>
         <div class="bar">
-          <div class="live">
-            <span class="icon"><svg-icon iconClass="love2"></svg-icon></span>
-            <span class="text">{{item.collectionCount}}</span>
+          <div class="like">
+            <span class="icon"><svg-icon iconClass="dianzan"></svg-icon></span>
+            <span class="text" v-if="item.collectionCount">{{item.collectionCount}}</span>
+            <span class="text" v-else>点赞</span>
           </div>
           <div class="comment">
-            <span class="icon"><svg-icon iconClass="comment"></svg-icon></span>
+            <span class="icon"><svg-icon iconClass="pinlun"></svg-icon></span>
             <span class="text" v-if="item.commentsCount">{{item.commentsCount}}</span>
             <span class="text" v-else>评论</span>
           </div>
@@ -86,7 +87,7 @@ export default {
     padding-top: 20px;
   }
   .panel {
-    padding: 40px 40px;
+    padding: 30px 40px;
     width: 100%;
     background-color: #fff;
     .header {
@@ -142,15 +143,17 @@ export default {
     .bar {
       margin-top: 15px;
       .flex(@justify-content: flex-start);
-      font-size: 32px;
-      .icon {
-        font-size: 36px;
-      }
-      .text {
-        color: @font-color;
-      }
-      .live {
-        margin-right: 80px;
+      font-size: 28px;
+      color: @font-color;
+      .like, .comment {
+        .flex();
+        margin-right: 30px;
+        .icon {
+          font-size: 48px;
+        }
+        .text {
+          margin-top: 7px;
+        }
       }
     }
   }

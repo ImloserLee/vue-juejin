@@ -9,7 +9,7 @@
       :pullUpLoad="pullUpLoadObj"
       @pullingDown="handlePullDown"
       @pullingUp="handlePullUp">
-      <ul>
+      <ul class="dynamic-ul">
         <li class="dynamic-list" 
             v-for="danamic in dynamicPinList" 
             :key="danamic.type === 'follow' ? danamic.follow.objectId : danamic.pin.objectId"
@@ -88,13 +88,16 @@ export default {
 <style lang="less" scoped>
   @import '~style/mixin.less';
   .dynamic {
-    .scroll {
-      height: e("calc(100vh - 200px)");
-    }
-    .dynamic-list {
-      margin-top: 20px;
-      padding: 20px;
-      background: #fff;
+    height: e("calc(100vh - 200px)");
+    .dynamic-ul {
+      padding-top: 20px;
+      .dynamic-list {
+        margin-top: 20px;
+        background: #fff;
+        &:first-child {
+           margin-top: 0;
+        }
+      }
     }
   }
 </style>

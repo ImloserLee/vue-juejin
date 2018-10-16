@@ -23,9 +23,6 @@ export default {
         return {}
       }
     }
-  },
-  created() {
-    console.log(this.dynamicItemData)
   }
 }
 </script>
@@ -33,6 +30,7 @@ export default {
 <style lang="less" scoped>
   @import '~style/mixin.less';
   .dynamic-item {
+    padding: 20px;
     .flex(@justify-content: flex-start);
     .avatar {
       width: 100px;

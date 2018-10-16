@@ -3,7 +3,7 @@
     <div class="header_l" @click="handleBack">
       <svg-icon iconClass="return"></svg-icon>
     </div>
-    <div class="header_m">个人主页</div>
+    <div class="header_m">{{title}}</div>
     <div class="header_r">
       <svg-icon iconClass="yinpin" v-if="showRightIcon"></svg-icon>
     </div>

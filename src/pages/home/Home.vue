@@ -254,10 +254,6 @@ export default {
             color: @base-color;
           }
         }
-        .time_panel {
-          padding-top: 20px;
-        }
-
       }
     }
     

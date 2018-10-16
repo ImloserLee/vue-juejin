@@ -33,8 +33,6 @@ export default {
     return {
       content: '',
       userInfo: '',
-      scrollbar: true,
-      scrollbarFade: true,
     }
   },
   mounted() {
@@ -154,5 +152,12 @@ export default {
         margin-right: 15px;
       }
     }
+  }
+  .animate-enter-active, .animate-leave-active {
+    transition: all .5s;
+  }
+  .animate-enter, .animate-leave-to {
+    opacity: 0;
+    transform: translate3d(100%, 0, 0);
   }
 </style>
