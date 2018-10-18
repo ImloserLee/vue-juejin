@@ -42,7 +42,7 @@ export default {
   methods: {
     async getDetailData(typeNum) {
       let { id, type } = this.$route.query
-      let { token = '', uid = '', device_id = '' } = this.auth ? this.auth : ''
+      let { token = '', uid = 'unlogin', device_id = '' } = this.auth ? this.auth : ''
       let data = {
         params: {
           uid: uid,

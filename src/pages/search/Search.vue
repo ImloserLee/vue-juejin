@@ -76,9 +76,7 @@ export default {
       }
     },
     async getEntryByRank(reload) {
-      let token = this.auth ? this.auth.token : ''
-      let device_id = this.auth ? this.auth.device_id : ''
-      let uid = this.auth ? this.auth.uid : 'unlogin'
+      let { token = '', uid = 'unlogin', device_id = '' } = this.auth ? this.auth : ''
       let rankList = this.rankList
       // 根据抓包接口,下拉刷新和刚进入页面时before参数对应的值为空
       if (!rankList.length || reload) {

@@ -51,7 +51,7 @@
             <span class="item">我的钱包</span>
             <span class="item number">{{personData.likedPinCount || 0}}</span>
           </li>
-          <li class="list">
+          <li class="list" @click="handleToDetailPage('article')">
             <span class="item icon"><svg-icon iconClass="eye"></svg-icon></span>
             <span class="item">阅读过的文章</span>
             <span class="item modifier">篇</span>

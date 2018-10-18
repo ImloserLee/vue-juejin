@@ -50,7 +50,7 @@ export default {
     hasRight: {
       type: Boolean,
       default: true
-    }
+    },
   },
   methods: {
     handleCloseRecomment() {

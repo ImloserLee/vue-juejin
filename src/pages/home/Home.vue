@@ -80,7 +80,7 @@ export default {
   methods: {
     // 获取热门信息
     async getEntryByHotRecomment() {
-      let { token = '', uid = '', device_id = '' } = this.auth ? this.auth : ''
+      let { token = '', uid = 'unlogin', device_id = '' } = this.auth ? this.auth : ''
       let data = {
         params: {
           src: 'ios',
@@ -107,11 +107,14 @@ export default {
         return item.objectId
       })
       entryIds = entryIds.join('|')
+      let { token = '', uid = 'unlogin', device_id = '' } = this.auth ? this.auth : ''
       let data = {
         params: {
           src: 'ios',
           entryId: entryIds,
-          ...this.auth
+          token: token,
+          uid: uid,
+          device_id: device_id
         }
       }
       let res = await API.refreshHotRecomment(data)

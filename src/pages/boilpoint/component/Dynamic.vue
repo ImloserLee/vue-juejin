@@ -92,6 +92,7 @@ export default {
     .dynamic-ul {
       padding-top: 20px;
       .dynamic-list {
+        padding: 20px 0;
         margin-top: 20px;
         background: #fff;
         &:first-child {

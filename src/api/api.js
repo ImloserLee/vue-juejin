@@ -164,6 +164,18 @@ class API extends Server {
       throw err
     }
   }
+
+  // 阅读过的文章接口数据
+  async getEntryBySelf(params = {}) {
+    try {
+      let result = await this.axios('get', `/timeline/get_entry_by_self`, params)
+      if (result.status === 200) {
+        return result.data
+      }
+    } catch (err) {
+      throw err
+    }
+  }
 }
 
 export default new API()
