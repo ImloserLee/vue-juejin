@@ -6,7 +6,7 @@
         <div class="info_panel_t">
           <div class="avatar">
             <img :src="personInfo.avatarLarge" v-if="personInfo.avatarLarge">
-            <img src="../../assets/images/avatar.png" v-else>
+            <img src="../../assets/images/avatar.png" v-else> 
           </div>
           <div class="txt">
             <div class="name">{{personInfo.username}}</div>
@@ -23,7 +23,8 @@
             <p class="type">关注者</p>
           </div>
           <div class="r">
-            <span class="edit">编辑</span>
+            <span class="fouce" v-if="isMutil">关注</span>
+            <span class="edit" v-else>编辑</span>
           </div>
         </div>
       </div>
@@ -85,7 +86,12 @@ export default {
     VHeader
   },
   mounted() {
-    this.getUserInfo()
+    let id = this.$route.query.id
+    if (id) {
+      this.getMultiUser(id)
+    } else {
+      this.getUserInfo()
+    }
   },
   methods: {
     async getUserInfo() {
@@ -100,6 +106,21 @@ export default {
         this.personInfo = res.d
       }
     },
+    async getMultiUser(id) {
+      let { token } = this.auth
+      let data = {
+        params: {
+          src: 'ios',
+          token: token,
+          ids: id,
+          cols: 'objectId|username|avatar_large|avatarLarge|role|company|jobTitle|self_description|selfDescription|blogAddress|isUnitedAuthor|isAuthor|authData|totalHotIndex|postedEntriesCount|postedPostsCount|collectedEntriesCount|likedPinCount|collectionSetCount|subscribedTagsCount|followeesCount|followersCount|pinCount'
+        }
+      }
+      let res = await API.getMultiUser(data)
+      if (res.m === 'ok') {
+        this.personInfo = res.d[id]
+      }
+    },
     handleBack() {
       this.$router.go(-1)
     }
@@ -107,7 +128,10 @@ export default {
   computed: {
     ...mapGetters([
       'auth'
-    ])
+    ]),
+    isMutil() {
+      return this.$route.query.id
+    }
   }
 }
 </script>
@@ -133,7 +157,7 @@ export default {
         .txt {
           margin-left: 20px;
           height: 100px;
-          font-size: 36px;
+          font-size: 32px;
           .name {
             font-weight: bold;
             margin-bottom: 15px;
@@ -145,10 +169,10 @@ export default {
         margin-top: 15px;
         .l {
           width: 120px;
-          font-size: 36px;
+          font-size: 32px;
           .type {
             margin-top: 10px;
-            font-size: 32px;
+            font-size: 28px;
             color: @font-color;
           }
         }
@@ -162,6 +186,13 @@ export default {
             padding: 12px 40px;
             border: 2px solid @base-color;
             border-radius: 7px;
+          }
+          .fouce {
+            display: block;
+            padding: 12px 40px;
+            border: 2px solid #92c452;
+            border-radius: 7px;
+            color: #92c452;
           }
         }
       }

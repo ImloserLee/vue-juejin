@@ -11,5 +11,10 @@ module.exports = merge(prodEnv, {
   API_BANNER: '"/banner"',
   API_STORAGE: '"/storage"',
   API_ENTRYVIEW: '"/entryview"',
-  API_SHORT: '"/short"'
+  API_SHORT: '"/short"',
+  API_SEARCH: '"/search"',
+  API_LCCRO: '"/lccro"',
+  API_USERLIKE: '"/userlike"',
+  API_COLLECTION: '"/collection"'
 })
+ 

@@ -2,8 +2,8 @@
   <ul>
     <li v-for="item in timeline" :key="item.objectId" class="list">
       <div class="panel">
-        <div class="header" @click="handleToDetail(item)">
-          <div class="header_left">
+        <div class="header">
+          <div class="header_left" @click="handleToHomePage(item)">
             <div class="avatar">
               <img v-lazy="item.user.avatarLarge" />
             </div>
@@ -11,7 +11,7 @@
               {{item.user.username}}
             </div>
           </div>
-          <div class="header_right">
+          <div class="header_right" @click="handleToDetail(item)">
             <span>{{item.tags | splitTag}}</span>
           </div>
         </div>
@@ -69,13 +69,17 @@ export default {
     handleToDetail(item) {
       let postId = getUrlParam(item.originalUrl)
       let objectId = item.objectId
-      let type = item.type === 'post' ? 1 : 2
-      let id = type === 1 ? postId : objectId
+      let type = item.type;
+      let id = type === 'post' ? postId : objectId
       let params = {
         id: id,
         type: type
       }
       this.$emit('toDetail', params)
+    },
+    handleToHomePage(item) {
+      let objectId = item.user.objectId
+      this.$emit('toHomePage', objectId)
     }
   }
 }

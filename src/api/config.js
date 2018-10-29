@@ -6,7 +6,11 @@ let api_config =  {
   banner: process.env.API_BANNER,
   storage: process.env.API_STORAGE,
   entryview: process.env.API_ENTRYVIEW,
-  short: process.env.API_SHORT
+  short: process.env.API_SHORT,
+  search: process.env.API_SEARCH,
+  lccro: process.env.API_LCCRO,
+  userlike: process.env.API_USERLIKE,
+  collection: process.env.API_COLLECTION
 }
 
 export default api_config

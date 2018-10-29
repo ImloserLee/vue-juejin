@@ -38,13 +38,18 @@ export default {
     height: 100px;
     border-bottom: 1px solid #c7c5c5;
     background-color: @bg-color;
-    &_l, &_r {
+    &_l {
       width: 80px;
+      font-size: 64px; 
     }
     &_m {
       flex: 1;
       text-align: center;
       font-size: 36px;
+    }
+    &_r {
+      width: 80px;
+      font-size: 52px;
     }
   }
 </style>

@@ -30,7 +30,12 @@
         >
           <span slot="text" class="txt">热门推荐</span>
         </hot-recomment>
-        <item-pane :timeline="timelineData" @toDetail="handleToDetail"></item-pane>
+        <item-pane 
+          :timeline="timelineData" 
+          @toDetail="handleToDetail" 
+          @toHomePage="handleToHomePage"
+        >
+        </item-pane>
       </div>
     </scroll>
     <router-view></router-view>
@@ -84,7 +89,7 @@ export default {
       let data = {
         params: {
           src: 'ios',
-          limit: 3,
+          limit: 20,
           token: token,
           device_id: device_id,
           uid: uid,
@@ -173,6 +178,11 @@ export default {
         let entrylist = res.d && res.d.entrylist || []
         this.timelineData = reload ? entrylist : this.timelineData.concat(entrylist.slice(1))
       }
+    },
+
+    // 前往个人首页
+    handleToHomePage(id) {
+      this.$router.push({ path: '/homepage' , query: { id: id } })
     },
 
     // 前往登陆页面

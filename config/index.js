@@ -32,6 +32,13 @@ module.exports = {
           '^/userinfo': '/'
         }
       },
+      '/lccro': {
+        target: 'https://lccro-api-ms.juejin.im/v1',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/lccro': '/'
+        }
+      },
       '/brochure': {
         target: 'https://xiaoce-timeline-api-ms.juejin.im/v1',
         changeOrigin: true,
@@ -65,6 +72,27 @@ module.exports = {
         changeOrigin: true,
         pathRewrite: {
           '/short': '/'
+        }
+      },
+      '/search': {
+        target: 'https://search-merger-ms.juejin.im/v1',
+        changeOrigin: true,
+        pathRewrite: {
+          '/search': '/'
+        }
+      },
+      '/userlike': {
+        target: 'https://user-like-wrapper-ms.juejin.im/v1',
+        changeOrigin: true,
+        pathRewrite: {
+          '/userlike': '/'
+        }
+      },
+      '/collection': {
+        target: 'https://collection-set-ms.juejin.im/v1',
+        changeOrigin: true,
+        pathRewrite: {
+          '/collection': '/'
         }
       },
     },

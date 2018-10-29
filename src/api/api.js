@@ -58,6 +58,18 @@ class API extends Server {
     }
   }
 
+  // 获取其他个人信息
+  async getMultiUser(params = {}) {
+    try {
+      let result = await this.axios('get', `${apiconfig.lccro}/get_multi_user`, params)
+      if (result.status === 200) {
+        return result.data
+      }
+    } catch (err) {
+      throw err
+    }
+  }
+
   // 获取小册信息
   async getBrochureInfo(params = {}) {
     try {
@@ -98,6 +110,28 @@ class API extends Server {
   async getDetailData(params = {}) {
     try {
       let result = await this.axios('get', `${apiconfig.storage}/getDetailData`, params)
+      if (result.status === 200) {
+        return result.data
+      }
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async getEntryView(params = {}) {
+    try {
+      let result = await this.axios('get', `${apiconfig.entryview}/getEntryView`, params)
+      if (result.status === 200) {
+        return result.data
+      }
+    } catch (err) {
+      throw err
+    }
+  }
+
+  async getEntryByIds(params = {}) {
+    try {
+      let result = await this.axios('get', `${apiconfig.timeline}/get_entry_by_ids`, params)
       if (result.status === 200) {
         return result.data
       }
@@ -170,6 +204,44 @@ class API extends Server {
   async getEntryBySelf(params = {}) {
     try {
       let result = await this.axios('get', `${apiconfig.timeline}/get_entry_by_self`, params)
+      if (result.status === 200) {
+        return result.data
+      }
+    } catch (err) {
+      throw err
+    }
+  }
+
+  // 搜索接口
+  async getSearchData(params = {}) {
+    try {
+      let result = await this.axios('get', `${apiconfig.search}/search`, params)
+      if (result.status === 200) {
+        return result.data
+      }
+    } catch (err) {
+      throw err
+    }
+  }
+
+  // 获取我赞过的接口数据
+  async getUserLike(params = {}) {
+    try {
+      let { uid } = params.params
+      delete params.params.uid
+      let result = await this.axios('get', `${apiconfig.userlike}/user/${uid}/like/entry`, params)
+      if (result.status === 200) {
+        return result.data
+      }
+    } catch (err) {
+      throw err
+    }
+  }
+
+  // 获取收藏集接口数据
+  async getUserCollectionSet(params = {}) {
+    try {
+      let result = await this.axios('get', `${apiconfig.collection}/getUserCollectionSet`, params)
       if (result.status === 200) {
         return result.data
       }

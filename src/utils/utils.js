@@ -31,3 +31,15 @@ export function getUrlParam(url) {
   let postId = relUrl.split('/').slice(-1)[0]
   return postId
 }
+
+export function _debounce(func, delay=500) {
+  let timer;
+  return function(...args) {
+    if (timer) {
+      clearTimeout(timer)
+    }
+    timer = setTimeout(() => {
+      func.apply(this, args)
+    }, delay)
+  }
+}

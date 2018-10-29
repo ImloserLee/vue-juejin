@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <keep-alive>
+    <keep-alive exclude="HomePage">
       <router-view id="view"></router-view>
     </keep-alive>
     <div class="footer">

@@ -8,5 +8,9 @@ module.exports = {
   API_BANNER: '"https://banner-storage-ms.juejin.im/v1"',
   API_STORAGE: '"https://post-storage-api-ms.juejin.im/v1"',
   API_ENTRYVIEW: '"https://entry-view-storage-api-ms.juejin.im/v1"',
-  API_SHORT: '"https://short-msg-ms.juejin.im/v1"'
+  API_SHORT: '"https://short-msg-ms.juejin.im/v1"',
+  API_SEARCH: '"https://search-merger-ms.juejin.im/v1"',
+  API_LCCRO: '"https://lccro-api-ms.juejin.im/v1"',
+  API_USERLIKE: '"https://user-like-wrapper-ms.juejin.im/v1"',
+  API_COLLECTION: '"https://collection-set-ms.juejin.im/v1"',
 }

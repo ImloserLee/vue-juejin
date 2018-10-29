@@ -17,8 +17,9 @@
       </header>
       <div v-html="content" class="content"></div>
       <footer class="footer">
-        <span><svg-icon iconClass="like"></svg-icon></span>
-        <span><svg-icon iconClass="pinlun"></svg-icon></span>
+        <input type="text" class="comment" placeholder="输入评论..." />
+        <span class="sl"><svg-icon iconClass="dianzan"></svg-icon></span>
+        <span class="sr"><svg-icon iconClass="pinlun"></svg-icon></span>
       </footer>
     </div>
   </transition>
@@ -36,12 +37,57 @@ export default {
     }
   },
   mounted() {
-    this.getDetailData(1)
-    this.getDetailData(2)
+    this.init()
   },
   methods: {
-    async getDetailData(typeNum) {
+    init() {
       let { id, type } = this.$route.query
+      if (type === 'post') {
+        this.getDetailData(id, 1)
+        this.getDetailData(id, 2)
+      } else {
+        this.getEntryView(id)
+        this.getEntryByIds(id)
+      }
+    },
+    async getDetailData(postId, type) {
+      let { token = '', uid = 'unlogin', device_id = '' } = this.auth ? this.auth : ''
+      let data = {
+        params: {
+          uid: uid,
+          device_id: device_id,
+          token: token,
+          src: 'ios',
+          type: type === 1 ? 'entryView' : 'entry',
+          postId: postId
+        }
+      }
+      let res = await API.getDetailData(data)
+      if (res.s === 1) {
+        if (type === 1) {
+          this.content = res.d.content
+        } else {
+          this.userInfo = res.d.user
+        }
+      }
+    },
+    async getEntryView(entryId) {
+      let { token = '', uid = 'unlogin', device_id = '' } = this.auth ? this.auth : ''
+      let data = {
+        params: {
+          uid: uid,
+          device_id: device_id,
+          token: token,
+          src: 'ios',
+          entryId: entryId
+        }
+      }
+      let res = await API.getEntryView(data)
+      if (res.s === 1) {
+        this.content = res.d.content
+      }
+    },
+    async getEntryByIds(entryId) {
       let { token = '', uid = 'unlogin', device_id = '' } = this.auth ? this.auth : ''
       let data = {
         params: {
@@ -49,18 +95,12 @@ export default {
           device_id: device_id,
           token: token,
           src: 'web',
-          type: typeNum === 1 ? 'entryView' : 'entry',
-          postId: id
+          entryIds: entryId
         }
       }
-      let res = await API.getDetailData(data)
+      let res = await API.getEntryByIds(data)
       if (res.s === 1) {
-        if (typeNum === 1) {
-          this.content = res.d.content
-        } else {
-          this.userInfo = res.d.user
-        }
-        
+        this.userInfo = res.d.entrylist[0].user
       }
     },
     handleGoBack() {
@@ -77,6 +117,9 @@ export default {
 
 <style lang="less" scoped>
   @import '~style/mixin.less';
+  input::-webkit-input-placeholder {
+    color: #919196;
+  }
   .detail {
     .fixed(@background-color: #fff);
     .header {
@@ -148,8 +191,21 @@ export default {
       background-color: @bg-color;
       height: 100px;
       font-size: 64px;
-      span {
-        margin-right: 15px;
+      border-top: 1px solid @border-color;
+      .comment {
+        width: 70%;
+        height: 70%;
+        border-radius: 36px;
+        border: 1px solid #f1f1f2;
+        background-color: #e9e9e9;
+        font-size: 32px;
+        text-indent: 24px;
+      }
+      .sl {
+        margin-left: 20px;
+      }
+      .sr {
+        margin-left: 35px;
       }
     }
   }

@@ -26,6 +26,10 @@ export const router = new Router({
           path: 'detail',
           component: _import_('detail/Detail')
         },
+        {
+          path: 'searchdetail',
+          component: _import_('searchdetail/SearchDetail')
+        },
       ]
     },
     {
@@ -80,6 +84,24 @@ export const router = new Router({
       name: 'Setting',
       meta: { requireAuth: true },
       component: _import_('setting/Setting')
+    },
+    {
+      path: '/article',
+      name: 'Article',
+      meta: { requireAuth: true },
+      component: _import_('article/Article')
+    },
+    {
+      path: '/thumbs',
+      name: 'Thumbs',
+      meta: { requireAuth: true },
+      component: _import_('thumbs/Thumbs')
+    },
+    {
+      path: '/collection',
+      name: 'Collection',
+      meta: { requireAuth: true },
+      component: _import_('collection/Collection')
     },
     {
       path: '/login',

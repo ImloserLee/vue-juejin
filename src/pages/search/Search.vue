@@ -1,7 +1,7 @@
 <template>
   <div class="search">
-    <header class="header">
-      <input type="text" placeholder="搜索" />
+    <header class="header" @click="handleToSearchDetail">
+      <input type="text" placeholder="搜索" readonly />
       <svg-icon iconClass="search" class="icon"></svg-icon>
     </header>
     <scroll 
@@ -101,6 +101,9 @@ export default {
     },
     handleToDetail(params) {
       this.$router.push({ path: 'search/detail', query: { id: params.id, type: params.type } })
+    },
+    handleToSearchDetail() {
+      this.$router.push({path: 'search/searchdetail'})
     },
     handlePullUp() {
       this.getEntryByRank()

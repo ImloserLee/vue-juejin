@@ -28,13 +28,13 @@
             <span class="item modifier"></span>
             <span class="item number"></span>
           </li>
-          <li class="list">
+          <li class="list" @click="handleToDetailPage('thumbs')">
             <span class="item icon"><svg-icon iconClass="feidian"></svg-icon></span>
             <span class="item">我赞过的</span>
             <span class="item modifier">篇</span>
             <span class="item number">{{personData.collectedEntriesCount || 0}}</span>
           </li>
-          <li class="list">
+          <li class="list" @click="handleToDetailPage('collection')">
             <span class="item icon"><svg-icon iconClass="star-yellow"></svg-icon></span>
             <span class="item">收藏集</span>
             <span class="item modifier">个</span>

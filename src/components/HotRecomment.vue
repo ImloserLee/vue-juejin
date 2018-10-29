@@ -1,6 +1,6 @@
 <template>
   <section class="hot">
-    <div class="title">
+    <div class="title" v-if="hasTitle">
       <div class="title_left">
         <svg-icon :iconClass="iconName"></svg-icon>
         <slot name="text"></slot>
@@ -51,6 +51,10 @@ export default {
       type: Boolean,
       default: true
     },
+    hasTitle: {
+      type:Boolean,
+      default: true
+    }
   },
   methods: {
     handleCloseRecomment() {
@@ -64,8 +68,8 @@ export default {
     handleToDetail(item) {
       let postId = getUrlParam(item.originalUrl)
       let objectId = item.objectId
-      let type = item.type === 'post' ? 1 : 2
-      let id = type === 1 ? postId : objectId
+      let type = item.type
+      let id = type === 'post' ? postId : objectId
       let params = {
         id: id,
         type: type
@@ -126,7 +130,11 @@ export default {
         padding-right: 20px;
         height: 100%;
         .txt {
-          margin-bottom: 25px;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+          overflow: hidden;
+          margin-bottom: 30px;
           font-size: 32px;
         }
         .slogan {

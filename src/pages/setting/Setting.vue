@@ -6,14 +6,14 @@
         <li class="list">
           <div class="l">手机</div>
           <div class="r">
-            <span class="tel">18834565433</span>
+            <span class="tel">{{settingInfo.mobilePhoneNumber}}</span>
             <span class="icon"><svg-icon iconClass="arrow-right"></svg-icon></span>
           </div>
         </li>
         <li class="list">
           <div class="l">邮箱</div>
           <div class="r">
-            <span class="tel">1323023939@qq.com</span>
+            <span class="tel">{{settingInfo.email}}</span>
             <span class="icon"><svg-icon iconClass="arrow-right"></svg-icon></span>
           </div>
         </li>
@@ -27,12 +27,34 @@
 
 <script>
 import VHeader from 'components/Header'
+import { mapGetters } from 'vuex'
+import API from 'api/api'
 export default {
   name: 'Setting',
   components: {
     VHeader
   },
+  data() {
+    return {
+      settingInfo: []
+    }
+  },
+  mounted() {
+    this.getUserInfo()
+  },
   methods: {
+    async getUserInfo() {
+      let data = {
+        params: {
+          src: 'ios',
+          ...this.auth
+        }
+      }
+      let res = await API.getUserInfo(data)
+      if (res.m === 'ok') {
+        this.settingInfo = res.d
+      }
+    },
     handleGoBack() {
       this.$router.push({ path: '/person' })
     },
@@ -41,6 +63,11 @@ export default {
         this.$router.push('/boil')
       })
     }
+  },
+  computed: {
+    ...mapGetters([
+      'auth'
+    ])
   }
 }
 </script>
