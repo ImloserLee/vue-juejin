@@ -249,6 +249,32 @@ class API extends Server {
       throw err
     }
   }
+
+  // 获取标签管理接口数据
+  async getTagData(params = {}) {
+    try {
+      let { uid } = params.params
+      delete params.params.uid
+      let result = await this.axios('get', `${apiconfig.tag}/user/${uid}/subscribe`, params)
+      if (result.status === 200) {
+        return result.data
+      }
+    } catch (err) {
+      throw err
+    }
+  }
+
+  // 获取分享文章
+  async getEntryBySelf(params = {}) {
+    try {
+      let result = await this.axios('get', `${apiconfig.timeline}/get_entry_by_self`, params)
+      if (result.status === 200) {
+        return result.data
+      }
+    } catch (err) {
+      throw err
+    }
+  }
 }
 
 export default new API()

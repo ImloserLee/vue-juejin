@@ -57,7 +57,7 @@
             <span class="item modifier">篇</span>
             <span class="item number">{{personData.viewedEntriesCount || 0}}</span>
           </li>
-          <li class="list">
+          <li class="list"  @click="handleToDetailPage('tag')">
             <span class="item icon"><svg-icon iconClass="tag"></svg-icon></span>
             <span class="item">标签管理</span>
             <span class="item modifier">个</span>
@@ -118,7 +118,8 @@ export default {
       this.$router.push({path: '/homepage'})
     },
     handleToDetailPage(type) {
-      this.$router.push({path: `/${type}`})
+      let uid = this.personData.uid
+      this.$router.push({path: `/${type}`, query: { uid }})
     }
   },
   computed: {

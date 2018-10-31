@@ -46,7 +46,7 @@
 import Vue from 'vue'
 import Scroll from 'components/Scroll'
 import VHeader from './component/Header'
-import ItemPane from './component/ItemPanel'
+import ItemPane from 'components/ItemPanel'
 import HotRecomment from 'components/HotRecomment'
 import { mapGetters } from 'vuex'
 import { scrollMixin } from 'utils/mixin'
@@ -117,9 +117,9 @@ export default {
         params: {
           src: 'ios',
           entryId: entryIds,
-          token: token,
-          uid: uid,
-          device_id: device_id
+          token,
+          uid,
+          device_id
         }
       }
       let res = await API.refreshHotRecomment(data)
@@ -142,9 +142,9 @@ export default {
           src: 'ios',
           limit: LIMIT,
           before: rankIndex,
-          token: token,
-          device_id: device_id,
-          uid: uid,
+          token,
+          device_id,
+          uid,
         }
       }
       let res = await API.getEntryByTimeline(data)

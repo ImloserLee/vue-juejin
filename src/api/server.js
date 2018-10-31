@@ -15,7 +15,9 @@ export default class Server {
         timeout: 30000,
         params: null,
         data: null,
-        headers: null,
+        headers: {
+          'X-Juejin-Src': 'ios'
+        },
         validateStatus: (status) => {
           return status >= 200 && status < 300
         },

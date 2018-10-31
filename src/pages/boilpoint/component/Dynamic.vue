@@ -57,10 +57,10 @@ export default {
       let data = {
         params: {
           src: 'ios',
-          token: token,
-          uid: uid,
-          device_id: device_id,
-          before: createdAt,
+          token,
+          uid,
+          device_id,
+          createdAt,
           limit: 20
         }
       }

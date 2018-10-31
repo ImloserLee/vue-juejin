@@ -13,4 +13,5 @@ module.exports = {
   API_LCCRO: '"https://lccro-api-ms.juejin.im/v1"',
   API_USERLIKE: '"https://user-like-wrapper-ms.juejin.im/v1"',
   API_COLLECTION: '"https://collection-set-ms.juejin.im/v1"',
+  API_TAG: '"https://gold-tag-ms.juejin.im/v1"',
 }

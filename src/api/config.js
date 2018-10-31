@@ -10,7 +10,8 @@ let api_config =  {
   search: process.env.API_SEARCH,
   lccro: process.env.API_LCCRO,
   userlike: process.env.API_USERLIKE,
-  collection: process.env.API_COLLECTION
+  collection: process.env.API_COLLECTION,
+  tag: process.env.API_TAG,
 }
 
 export default api_config

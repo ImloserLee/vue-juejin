@@ -9,6 +9,7 @@
       </span>
     </div>
     <scroll
+      ref="scroll"
       class="scroll"
       :data="listData"
       :pullDownRefresh="pullDownRefreshObj"
@@ -46,7 +47,8 @@ export default {
       hasTitle: false,
       inputValue: '',
       listData: [],
-      pageNum: 0
+      pageNum: 0,
+      pullUp: true
     }
   },
   methods: {
@@ -54,10 +56,10 @@ export default {
       if (!reload) {
         this.pageNum ++
       }
-      let pageNum = this.pageNum
+      let page = this.pageNum
       let data = {
         params: {
-          page: pageNum,
+          page,
           query: this.inputValue,
           src: 'ios',
           raw_result: false
@@ -66,6 +68,10 @@ export default {
       let res = await API.getSearchData(data)
       if (res.s === 1) {
         this.listData = reload ? res.d : this.listData.concat(res.d.slice(1))
+        if (!res.d.length) {
+          this.pullUp = false
+          this.pageNum = 0
+        }
       }
     },
     handleSearch: _debounce(function() {
@@ -81,7 +87,11 @@ export default {
       this.getSearchData(true)
     },
     handlePullUp() {
-      this.getSearchData()
+      if (this.pullUp) {
+        this.getSearchData()
+      } else {
+        this.$refs.scroll.forceUpdate()
+      }
     },
     handleToDetail(params) {
       this.$router.push({ path: 'detail', query: { id: params.id, type: params.type } })

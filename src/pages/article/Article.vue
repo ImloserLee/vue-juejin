@@ -39,8 +39,6 @@ export default {
   },
   created() {
     this.hasTitle = false
-  },
-  mounted() {
     this.getEntryBySelf(true)
   },
   methods: {

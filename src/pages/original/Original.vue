@@ -1,99 +1,91 @@
 <template>
-  <div class="thumbs">
-    <v-header title="赞过的文章" @goBack="handleGoBack"></v-header>
+  <div class="original">
+    <v-header title="原创文章" @goBack="handleGoBack"></v-header>
     <scroll
       ref="scroll"
       class="scroll"
-      :data="thumbsList"
+      :data="originalList"
       :scrollbar="scrollbarObj"
       :pullDownRefresh="pullDownRefreshObj"
       :pullUpLoad="pullUpLoadObj"
       @pullingDown="handlePullDown"
       @pullingUp="handlePullUp"
-      v-if="thumbsList.length"
+      v-if="originalList.length"
     >
-      <hot-recomment 
-        :hasTitle="hasTitle"
-        :recomment="thumbsList"
-      ></hot-recomment>
+      <item-panel :timeline="originalList"></item-panel>
     </scroll>
     <div class="no-more" v-else>
       <div class="icon"><svg-icon iconClass="file"></svg-icon></div>
-      <p class="text">暂无赞过的文章</p>
+      <p class="text">没有发布过原创文章呢</p>
     </div>
   </div>
 </template>
 
 <script>
 import VHeader from 'components/Header'
-import HotRecomment from 'components/HotRecomment'
+import ItemPanel from 'components/ItemPanel'
 import Scroll from 'components/Scroll'
 import { mapGetters } from 'vuex'
 import API from 'api/api'
 import { scrollMixin } from 'utils/mixin'
 export default {
-  name: 'Thumbs',
+  name: 'Original',
   components: {
     VHeader,
-    HotRecomment,
+    ItemPanel,
     Scroll
   },
   mixins: [scrollMixin],
   data() {
     return {
-      thumbsList: [],
-      pageNum: 0,
-      pullUp: true, //是否可以再次上拉加载更多,
+      originalList: [],
       userId: ''
     }
   },
   activated() {
-    this.hasTitle = false
     this.userId = this.$route.query.uid
   },
   watch: {
-    // 监听userId的变化,如果不是同一个用户,就重新获取下数据,否则使用缓存
     userId() {
-      this.getUserLike(true)
+      this.getEntryBySelf(true)
     }
   },
   methods: {
-    async getUserLike(reload) {
-      let { uid } = this.$route.query
-      // 上拉加载page增加
-      if (!reload) {
-        this.pageNum ++
+    async getEntryBySelf(reload) {
+      let { token = '', uid = 'unlogin', device_id = '' } = this.auth ? this.auth : {}
+      let targetUid = this.$route.query.uid
+      let list = this.originalList
+      if (!list.length || reload) {
+        list = [{ createdAt: '' }]
       }
-      let page = this.pageNum
+      let before = list.slice(-1)[0].createdAt || ''
       let data = {
         params: {
          uid,
-         page,
-         pageSize: 20
+         token,
+         device_id,
+         targetUid,
+         before,
+         limit: 20,
+         order: 'createdAt',
+         src: 'ios',
+         type: 'post'
         }
       }
-      let res = await API.getUserLike(data)
+      let res = await API.getEntryBySelf(data)
       if (res.s === 1) {
-        let entryList = res.d.entryList
-        this.thumbsList = reload ? entryList : this.thumbsList.concat(entryList.slice(1))
-        if (!entryList.length) {
-          this.pullUp = false
-          this.pageNum = 0
-        }
+        let entrylist = res.d.entrylist ? res.d.entrylist : []
+        this.originalList = reload ? entrylist : this.originalList.concat(entrylist.slice(1))
       }
     },
-    handleGoBack() {
+     handleGoBack() {
       this.$router.go(-1)
     },
     handlePullDown() {
-      this.getUserLike(true)
+      this.getEntryBySelf(true)
     },
     handlePullUp() {
-      if (this.pullUp) {
-        this.getUserLike()
-      } else {
-        this.$refs.scroll.forceUpdate()
-      }
+      this.getEntryBySelf()
     }
   },
   computed: {
@@ -106,7 +98,7 @@ export default {
 
 <style lang="less" scoped>
   @import '~style/mixin.less';
-  .thumbs {
+  .original {
     .fixed();
     .no-more {
       .flex(@flex-direction: column);
@@ -120,5 +112,3 @@ export default {
     }
   }
 </style>
-
-

@@ -39,30 +39,28 @@
             <span class="item icon"><svg-icon iconClass="arrow-right"></svg-icon></span>
             <span class="item number">{{personInfo.pinCount}}</span>
           </li>
-          <li class="list">
+          <li class="list" @click="handleToDetailPage('original')">
             <span class="item">原创文章</span>
             <span class="item icon"><svg-icon iconClass="arrow-right"></svg-icon></span>
             <span class="item number">{{personInfo.postedPostsCount}}</span>
           </li>
-          <li class="list">
+          <li class="list" @click="handleToDetailPage('share')">
             <span class="item">分享文章</span>
             <span class="item icon"><svg-icon iconClass="arrow-right"></svg-icon></span>
             <span class="item number">{{personInfo.postedEntriesCount}}</span>
           </li>
-          <li class="list no-border">
+          <li class="list no-border" @click="handleToDetailPage('collection')">
             <span class="item">收藏集</span>
             <span class="item icon"><svg-icon iconClass="arrow-right"></svg-icon></span>
             <span class="item number">{{personInfo.collectionSetCount}}</span>
           </li>
-          <li class="list">
+          <li class="list" @click="handleToDetailPage('thumbs')">
             <span class="item">赞过的文章</span>
             <span class="item icon"><svg-icon iconClass="arrow-right"></svg-icon></span>
             <span class="item number">{{personInfo.collectedEntriesCount}}</span>
           </li>
           <li class="list no-border">
             <span class="item">关注的标签</span>
-            <span class="item icon"><svg-icon iconClass="arrow-right"></svg-icon></span>
-            <span class="item number">0</span>
           </li>
         </ul>
       </div>
@@ -85,7 +83,7 @@ export default {
   components: {
     VHeader
   },
-  mounted() {
+  activated() {
     let id = this.$route.query.id
     if (id) {
       this.getMultiUser(id)
@@ -120,6 +118,10 @@ export default {
       if (res.m === 'ok') {
         this.personInfo = res.d[id]
       }
+    },
+    handleToDetailPage(type) {
+      let uid = this.personInfo.uid
+      this.$router.push({ path: `/${type}`, query: { uid } })
     },
     handleBack() {
       this.$router.go(-1)

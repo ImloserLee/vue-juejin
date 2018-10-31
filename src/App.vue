@@ -1,8 +1,9 @@
 <template>
   <div id="app">
-    <keep-alive exclude="HomePage">
-      <router-view id="view"></router-view>
+    <keep-alive>
+      <router-view id="view" v-if="$route.meta.keepAlive"></router-view>
     </keep-alive>
+    <router-view id="view" v-if="!$route.meta.keepAlive"></router-view>
     <div class="footer">
       <router-link to="/home" tag="div" class="item">
         <div class="icon">
@@ -60,27 +61,6 @@ export default {
     ...mapGetters([
       'isLogin'
     ])
-  },
-  watch: {
-    $route(to, from) {
-      /*
-      0: 不做动画
-      1: 左切换
-      2: 右切换
-      3: 上切换
-      4: 下切换
-        */
-      let animate = this.$router.animate || to.meta.slide
-      if (!animate) {
-        this.animate = ''
-      } else {
-        this.animate = animate === 1 ? 'slide-left' :
-            animate === 2 ? 'slide-right' :
-            animate === 3 ? 'slide-top' :
-            animate === 4 ? 'slide-bottom' : ''
-      }
-      this.$router.animate = 0
-    }
   }
 }
 </script>

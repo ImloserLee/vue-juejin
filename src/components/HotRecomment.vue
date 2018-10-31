@@ -12,19 +12,21 @@
         <span class="r" @click="handleCloseRecomment"><svg-icon iconClass="close" class="icon-close"></svg-icon></span>
       </div>
     </div>
-    <div class="item" v-for="item in recomment" :key=item.objectId @click="handleToDetail(item)">
-      <div class="item_left">
-        <p class="txt">{{item.title}}</p>
-        <div class="slogan">
-          <span>{{item.collectionCount}}喜欢·</span>
-          <span>{{item.user.username}}·</span>
-          <span>{{item.createdAt | timeBefore}}</span>
+    <ul>
+      <li class="item" v-for="item in recomment" :key=item.objectId @click="handleToDetail(item)">
+        <div class="item_left">
+          <p class="txt">{{item.title}}</p>
+          <div class="slogan">
+            <span>{{item.collectionCount}}赞</span>
+            <span>{{item.user.username}}·</span>
+            <span>{{item.createdAt | timeBefore}}</span>
+          </div>
         </div>
-      </div>
-      <div class="item_right" v-if="item.screenshot">
-        <img v-lazy="item.screenshot" />
-      </div>
-    </div>
+        <div class="item_right" v-if="item.screenshot">
+          <img v-lazy="item.screenshot" />
+        </div>
+      </li>
+    </ul>
   </section>
 </template>
 
@@ -47,11 +49,11 @@ export default {
       type: String,
       default: 'home-hot'
     },
-    hasRight: {
+    hasRight: { // 是否有右边的icon
       type: Boolean,
       default: true
     },
-    hasTitle: {
+    hasTitle: { // 是否有顶部标题栏
       type:Boolean,
       default: true
     }

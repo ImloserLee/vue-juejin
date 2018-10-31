@@ -15,6 +15,7 @@ module.exports = merge(prodEnv, {
   API_SEARCH: '"/search"',
   API_LCCRO: '"/lccro"',
   API_USERLIKE: '"/userlike"',
-  API_COLLECTION: '"/collection"'
+  API_COLLECTION: '"/collection"',
+  API_TAG: '"/tag"',
 })
  

@@ -134,14 +134,14 @@ export default {
         flex: 1;
         .flex();
         .icon {
-          flex: 1;
+          width: 50px;
           font-size: 56px;
           .svg-icon {
             margin-left: -10px;
           }
         }
         .info {
-          flex: 3;
+          flex: 1;
           .flex(@justify-content: flex-start);
           .avatar {
             display: inline-block;
@@ -162,7 +162,7 @@ export default {
         }
       }
       .right {
-        flex: 1;
+        width: 100px;
         .flex(@justify-content: flex-end);
         .icon {
           font-size: 64px;

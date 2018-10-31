@@ -10,9 +10,11 @@ export const router = new Router({
       path: '/home',
       name: 'Home',
       component: _import_('home/Home'),
+      meta: { keepAlive: true },
       children: [
         {
           path: 'detail',
+          meta: { keepAlive: true },
           component: _import_('detail/Detail')
         },
       ]
@@ -21,9 +23,11 @@ export const router = new Router({
       path: '/search',
       name: 'Search',
       component: _import_('search/Search'),
+      meta: { keepAlive: true },
       children: [
         {
           path: 'detail',
+          meta: { keepAlive: true },
           component: _import_('detail/Detail')
         },
         {
@@ -37,6 +41,7 @@ export const router = new Router({
       name: 'Boil',
       component: _import_('boilpoint/BoilPoint'),
       redirect: '/boil/recomment',
+      meta: { keepAlive: true },
       children: [
         {
           path: 'topic',
@@ -71,12 +76,13 @@ export const router = new Router({
     {
       path: '/person',
       name: 'Person',
+      meta: { keepAlive: true },
       component: _import_('person/Person')
     },
     {
       path: '/homepage',
       name: 'HomePage',
-      meta: { requireAuth: true },
+      meta: { requireAuth: true, keepAlive: true },
       component: _import_('homepage/HomePage')
     },
     {
@@ -88,20 +94,38 @@ export const router = new Router({
     {
       path: '/article',
       name: 'Article',
-      meta: { requireAuth: true },
+      meta: { requireAuth: true, keepAlive: true },
       component: _import_('article/Article')
     },
     {
       path: '/thumbs',
       name: 'Thumbs',
-      meta: { requireAuth: true },
+      meta: { requireAuth: true, keepAlive: true },
       component: _import_('thumbs/Thumbs')
     },
     {
       path: '/collection',
       name: 'Collection',
-      meta: { requireAuth: true },
+      meta: { requireAuth: true, keepAlive: true },
       component: _import_('collection/Collection')
+    },
+    {
+      path: '/tag',
+      name: 'Tag',
+      meta: { requireAuth: true },
+      component: _import_('tag/Tag')
+    },
+    {
+      path: '/share',
+      name: 'Share',
+      meta: { requireAuth: true, keepAlive: true },
+      component: _import_('share/Share')
+    },
+    {
+      path: '/original',
+      name: 'Original',
+      meta: { requireAuth: true, keepAlive: true },
+      component: _import_('original/Original')
     },
     {
       path: '/login',

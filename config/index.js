@@ -95,6 +95,13 @@ module.exports = {
           '/collection': '/'
         }
       },
+      '/tag': {
+        target: 'https://gold-tag-ms.juejin.im/v1',
+        changeOrigin: true,
+        pathRewrite: {
+          '/tag': '/'
+        }
+      },
     },
 
     // Various Dev Server settings
