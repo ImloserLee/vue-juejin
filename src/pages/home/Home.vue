@@ -38,7 +38,6 @@
         </item-pane>
       </div>
     </scroll>
-    <router-view></router-view>
   </div>
 </template>
 
@@ -209,7 +208,7 @@ export default {
       }
     },
     handleToDetail(params) {
-      this.$router.push({ path: 'home/detail', query: { id: params.id, type: params.type } })
+      this.$router.push({ path: 'detail', query: { id: params.id, type: params.type } })
     }
   },
   computed: {

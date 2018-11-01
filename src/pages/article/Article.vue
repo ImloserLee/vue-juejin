@@ -12,6 +12,7 @@
       <hot-recomment 
         :hasTitle="hasTitle"
         :recomment="articleList"
+        @toDetail="handleToDetail"
       ></hot-recomment>
     </scroll>
   </div>
@@ -68,6 +69,9 @@ export default {
     },
     handleGoBack() {
       this.$router.push({ path: '/person' })
+    },
+    handleToDetail(params) {
+      this.$router.push({ path: 'detail', query: { id: params.id, type: params.type } })
     },
     handlePullDown() {
       this.getEntryBySelf(true)

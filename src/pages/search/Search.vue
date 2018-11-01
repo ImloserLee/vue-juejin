@@ -100,7 +100,7 @@ export default {
       }
     },
     handleToDetail(params) {
-      this.$router.push({ path: 'search/detail', query: { id: params.id, type: params.type } })
+      this.$router.push({ path: 'detail', query: { id: params.id, type: params.type } })
     },
     handleToSearchDetail() {
       this.$router.push({path: 'search/searchdetail'})

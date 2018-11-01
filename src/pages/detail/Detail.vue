@@ -5,8 +5,11 @@
           <div class="left">
             <div class="icon" @click="handleGoBack"><svg-icon iconClass="return"></svg-icon></div>
             <div class="info">
-              <span class="avatar">
-                <img v-lazy="userInfo.avatarLarge">
+              <span class="avatar" v-if="userInfo.avatarLarge">
+                <img :src="userInfo.avatarLarge">
+              </span>
+              <span class="avatar" v-else>
+                <img src="../../assets/images/avatar.png">
               </span>
               <span class="name">{{userInfo.username}}</span>
             </div>
@@ -15,7 +18,12 @@
             <span class="icon"><svg-icon iconClass="shenluehao"></svg-icon></span>
           </div>
       </header>
-      <div v-html="content" class="content"></div>
+      <div class="scroll-content">
+        <div class="screen-hot" v-if="screenshot">
+          <img :src="screenshot">
+        </div>
+        <div v-html="content" class="content"></div>
+      </div>
       <footer class="footer">
         <input type="text" class="comment" placeholder="输入评论..." />
         <span class="sl"><svg-icon iconClass="dianzan"></svg-icon></span>
@@ -28,16 +36,29 @@
 <script>
 import API from 'api/api'
 import { mapGetters } from 'vuex'
+import Scroll from 'components/Scroll'
+import { scrollMixin } from 'utils/mixin'
 export default {
   name: 'Detail',
   data() {
     return {
       content: '',
       userInfo: '',
+      screenshot: '',
+      userId: ''
     }
   },
-  mounted() {
-    this.init()
+  mixins: [scrollMixin],
+  components: {
+    Scroll
+  },
+  activated() {
+    this.userId = this.$route.query.id
+  },
+  watch: {
+    userId() {
+      this.init()
+    }
   },
   methods: {
     init() {
@@ -59,7 +80,7 @@ export default {
           token: token,
           src: 'ios',
           type: type === 1 ? 'entryView' : 'entry',
-          postId: postId
+          postId
         }
       }
       let res = await API.getDetailData(data)
@@ -68,6 +89,7 @@ export default {
           this.content = res.d.content
         } else {
           this.userInfo = res.d.user
+          this.screenshot = res.d.screenshot
         }
       }
     },
@@ -91,10 +113,10 @@ export default {
       let { token = '', uid = 'unlogin', device_id = '' } = this.auth ? this.auth : ''
       let data = {
         params: {
-          uid: uid,
-          device_id: device_id,
-          token: token,
-          src: 'web',
+          uid,
+          device_id,
+          token,
+          src: 'ios',
           entryIds: entryId
         }
       }
@@ -169,14 +191,24 @@ export default {
         }
       }
     }
+    .scroll-content {
+      height: calc(100vh - 200px);
+      overflow-y: scroll;
+    }
+    .screen-hot {
+      padding-bottom: 35%;
+      height: 0;
+      overflow: hidden;
+      img {
+        width: 100%;
+      }
+    }
     .content {
       width: 100%;
-      height: calc(100vh - 200px);
       padding: 20px;
       margin-bottom: 100px;
       font-size: 36px;
       background-color: #fff;
-      overflow-y: scroll;
       /deep/ img {
         width: 100%;
       }

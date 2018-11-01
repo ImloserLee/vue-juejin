@@ -9,7 +9,9 @@
       </router-link>
       <i class="bar" :style="{left: $route.path.indexOf('/all') !== -1 ? '17%' : '67%'}"></i>
     </header>
-    <router-view></router-view>
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
   </div>
 </template>
 

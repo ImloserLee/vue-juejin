@@ -10,14 +10,7 @@ export const router = new Router({
       path: '/home',
       name: 'Home',
       component: _import_('home/Home'),
-      meta: { keepAlive: true },
-      children: [
-        {
-          path: 'detail',
-          meta: { keepAlive: true },
-          component: _import_('detail/Detail')
-        },
-      ]
+      meta: { keepAlive: true }
     },
     {
       path: '/search',
@@ -26,12 +19,8 @@ export const router = new Router({
       meta: { keepAlive: true },
       children: [
         {
-          path: 'detail',
-          meta: { keepAlive: true },
-          component: _import_('detail/Detail')
-        },
-        {
           path: 'searchdetail',
+          meta: { keepAlive: true },
           component: _import_('searchdetail/SearchDetail')
         },
       ]
@@ -45,14 +34,17 @@ export const router = new Router({
       children: [
         {
           path: 'topic',
+          meta: { keepAlive: true },
           component: _import_('boilpoint/component/Topic')
         },
         {
           path: 'recomment',
+          meta: { keepAlive: true },
           component: _import_('boilpoint/component/Recomment')
         },
         {
           path: 'dynamic',
+          meta: { keepAlive: true },
           component: _import_('boilpoint/component/Dynamic')
         }
       ]
@@ -61,14 +53,17 @@ export const router = new Router({
       path: '/brochure',
       name: 'Brochure',
       component: _import_('brochure/Brochure'),
+      meta: { keepAlive: true },
       redirect: '/brochure/all',
       children: [
         {
           path: 'all',
+          meta: { keepAlive: true },
           component: _import_('brochure/component/All')
         },
         {
           path: 'already',
+          meta: { keepAlive: true },
           component: _import_('brochure/component/Already')
         },
       ]
@@ -84,6 +79,11 @@ export const router = new Router({
       name: 'HomePage',
       meta: { requireAuth: true, keepAlive: true },
       component: _import_('homepage/HomePage')
+    },
+    {
+      path: '/detail',
+      meta: { keepAlive: true },
+      component: _import_('detail/Detail')
     },
     {
       path: '/setting',

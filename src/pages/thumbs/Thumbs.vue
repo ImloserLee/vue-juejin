@@ -15,6 +15,7 @@
       <hot-recomment 
         :hasTitle="hasTitle"
         :recomment="thumbsList"
+        @toDetail="handleToDetail"
       ></hot-recomment>
     </scroll>
     <div class="no-more" v-else>
@@ -84,6 +85,9 @@ export default {
     },
     handleGoBack() {
       this.$router.go(-1)
+    },
+    handleToDetail(params) {
+      this.$router.push({ path: 'detail', query: { id: params.id, type: params.type } })
     },
     handlePullDown() {
       this.getUserLike(true)
