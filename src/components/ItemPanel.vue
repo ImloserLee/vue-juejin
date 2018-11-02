@@ -28,8 +28,9 @@
         </div>
         <div class="bar">
           <div class="like">
-            <span class="icon"><svg-icon iconClass="dianzan"></svg-icon></span>
-            <span class="text" v-if="item.collectionCount">{{item.collectionCount}}</span>
+            <span class="icon" @click="handleCancelUserLike(item)" v-if="item.isCollected"><svg-icon iconClass="dianzan-fill"></svg-icon></span>
+            <span class="icon" @click="handleSetUserLike(item)" v-else><svg-icon iconClass="dianzan"></svg-icon></span>
+            <span class="text" :class="item.isCollected ? 'like-text': ''" v-if="item.collectionCount">{{item.collectionCount}}</span>
             <span class="text" v-else>点赞</span>
           </div>
           <div class="comment">
@@ -80,6 +81,16 @@ export default {
     handleToHomePage(item) {
       let objectId = item.user.objectId
       this.$emit('toHomePage', objectId)
+    },
+    handleSetUserLike(item) {
+      // 点赞操作接口需要参数objectId
+      let objectId = item.objectId
+      this.$emit('setUserLike', objectId)
+    },
+    handleCancelUserLike(item) {
+      // 取消点赞操作接口需要参数objectId
+      let objectId = item.objectId
+      this.$emit('cancelUserLike', objectId)
     }
   }
 }
@@ -156,7 +167,10 @@ export default {
           font-size: 48px;
         }
         .text {
-          margin-top: 7px;
+          margin-top: 9px;
+          &.like-text {
+            color: #6cbd45;
+          }
         }
       }
     }

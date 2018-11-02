@@ -6,9 +6,10 @@ import axios from 'axios'
  * @params data {object} post方式传参
  */
 export default class Server {
-  axios (method, url, params) {
+  axios (method, url, params, headers) {
     return new Promise((resolve, reject) => {
       if (typeof params !== 'object') params = {}
+      if (typeof headers !== 'object') headers = {}
       let _options = {
         method,
         url,
@@ -16,7 +17,8 @@ export default class Server {
         params: null,
         data: null,
         headers: {
-          'X-Juejin-Src': 'ios'
+          'X-Juejin-Src': 'ios',
+          ...headers
         },
         validateStatus: (status) => {
           return status >= 200 && status < 300

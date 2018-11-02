@@ -275,6 +275,33 @@ class API extends Server {
       throw err
     }
   }
+
+  // 点赞接口
+  async setUserLike(params = {}) {
+    try {
+      let { objectId, uid, device_id, token } = params
+      let headers = {'X-Juejin-Uid': uid, 'X-Juejin-Client': device_id, 'X-Juejin-Token': token }
+      let result = await this.axios('put', `${apiconfig.userlike}/user/like/entry/${objectId}`, {}, headers)
+      if (result.status === 200) {
+        return result.data
+      }
+    } catch (err) {
+      throw err
+    }
+  }
+  // 取消点赞接口
+  async cancelUserLike(params = {}) {
+    try {
+      let { objectId, uid, device_id, token } = params
+      let headers = {'X-Juejin-Uid': uid, 'X-Juejin-Client': device_id, 'X-Juejin-Token': token }
+      let result = await this.axios('delete', `${apiconfig.userlike}/user/like/entry/${objectId}`, {}, headers)
+      if (result.status === 200) {
+        return result.data
+      }
+    } catch (err) {
+      throw err
+    }
+  }
 }
 
 export default new API()

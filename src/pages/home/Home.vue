@@ -34,6 +34,8 @@
           :timeline="timelineData" 
           @toDetail="handleToDetail" 
           @toHomePage="handleToHomePage"
+          @setUserLike="handleSetUserLike"
+          @cancelUserLike="handleCancelUserLike"
         >
         </item-pane>
       </div>
@@ -89,9 +91,9 @@ export default {
         params: {
           src: 'ios',
           limit: 20,
-          token: token,
-          device_id: device_id,
-          uid: uid,
+          token,
+          device_id,
+          uid,
         }
       }
       let res = await API.getEntryByHotRecomment(data)
@@ -166,9 +168,9 @@ export default {
         params: {
           src: 'ios',
           limit: LIMIT,
-          uid: uid,
-          device_id: device_id,
-          token: token,
+          uid,
+          device_id,
+          token,
           before: rankIndex
         }
       }
@@ -176,6 +178,25 @@ export default {
       if (res.s === 1) {
         let entrylist = res.d && res.d.entrylist || []
         this.timelineData = reload ? entrylist : this.timelineData.concat(entrylist.slice(1))
+      }
+    },
+
+    // 点赞需要设置X-Juejin-Uid,该值为登陆用户的uid
+    async handleSetUserLike(objectId) {
+      let { uid, device_id, token } = this.auth
+      let data = { objectId,  uid, device_id, token }
+      let res = await API.setUserLike(data)
+      if (res.s === 1) {
+        this.handleToggleCollecte(objectId, 'add')
+      }
+    },
+
+    async handleCancelUserLike(objectId) {
+      let { uid, device_id, token } = this.auth
+      let data = { objectId,  uid, device_id, token }
+      let res = await API.cancelUserLike(data)
+      if (res.s === 1) {
+        this.handleToggleCollecte(objectId, 'minus')
       }
     },
 
@@ -189,6 +210,21 @@ export default {
       let path = this.$route.path
       this.$router.push({ path: '/login' , query: { url: path } })
     },
+
+    handleToggleCollecte(objectId, type) {
+      let timeline = this.timelineData
+      for (let i = 0; i < timeline.length; i ++) {
+        if (timeline[i].objectId === objectId) {
+          timeline[i].isCollected = !timeline[i].isCollected
+          if (type === 'add') {
+            timeline[i].collectionCount ++
+          } else {
+            timeline[i].collectionCount --
+          }
+        }
+      }
+    },
+
     handleColseRecomment() {
       this.showHotRecomment = false
     },

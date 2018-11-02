@@ -75,9 +75,9 @@ export default {
       let { token = '', uid = 'unlogin', device_id = '' } = this.auth ? this.auth : ''
       let data = {
         params: {
-          uid: uid,
-          device_id: device_id,
-          token: token,
+          uid,
+          device_id,
+          token,
           src: 'ios',
           type: type === 1 ? 'entryView' : 'entry',
           postId
