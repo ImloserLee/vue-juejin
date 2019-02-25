@@ -1,2 +1,0 @@
-webpackJsonp([21],{YPHj:function(t,e,s){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var a={render:function(){var t=this.$createElement,e=this._self._c||t;return e("div",{staticClass:"already"},[e("div",{staticClass:"icon"},[e("svg-icon",{attrs:{iconClass:"book"}})],1),this._v(" "),e("div",{staticClass:"text"},[this._v("暂无已购小册")])])},staticRenderFns:[]};var i=s("VU/8")({name:"Already"},a,!1,function(t){s("gNbH")},"data-v-17ade8c5",null);e.default=i.exports},gNbH:function(t,e){}});
-//# sourceMappingURL=21.2331a7549d045029119b.js.map
